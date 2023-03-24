@@ -82,6 +82,13 @@ select 'Card_Balance', to_date('010120 12:00:00','DDMMYY HH24:MI:SS'), 1, 20, 3 
 select 'Ride', to_date('010120 11:00:00','DDMMYY HH24:MI:SS'), 2, 30, 4 from dual union all
 select 'Pass', to_date('010120 11:00:00','DDMMYY HH24:MI:SS'), 2, 30, 4 from dual
 
+insert into LINE (transit_id, name, start_date)
+select 1,'Orange line',  to_date('01-01-1980','dd-mm-yyyy') from dual union all
+select 1,'Red line', to_date('01-01-1981','dd-mm-yyyy') from dual union all
+select 1,'Green line', to_date('01-01-1982','dd-mm-yyyy') from dual union all
+select 2,'Route 57', to_date('06-01-2000','dd-mm-yyyy') from dual union all
+select 2,'Route 66', to_date('30-01-2000','dd-mm-yyyy') from dual;
+
 /
 
 
