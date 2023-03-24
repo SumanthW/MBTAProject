@@ -103,6 +103,7 @@ select 2,3 from dual union all
 select 2,2 from dual union all
 select 3,7 from dual;
 
+insert into OPERATIONS ( start_time, end_time, reason, log_timestamp,, transit_id, line_id, station_id, recharge_device_id, transaction_device_id) 
 
 
 /
