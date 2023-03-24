@@ -22,26 +22,28 @@ BEGIN
             delete from RECHARGE where recharge_id = v_RECHARGE_ID;
 END;
 /
+
 CREATE OR REPLACE TRIGGER Operations_sequence_trigger
-    AFTER INSERT ON OR UPDATE ON OPERATIONS
+    AFTER INSERT OR UPDATE ON OPERATIONS
     FOR EACH ROW
 DECLARE
-    v_station_id STATION.station_id%TYPE;
-    v_line_id LINE.line_id%TYPE;
-    v_recharge_device_id RECHARGE_DEVICE.recharge_device_id%TYPE;
-    v_transaction_device_id TRANSACTION_DEVICE.transaction_device_id%TYPE;
+    v_station_id OPERATIONS.station_id%TYPE;
+    v_line_id OPERATIONS.line_id%TYPE;
+    v_recharge_device_id OPERATIONS.recharge_device_id%TYPE;
+    v_transaction_device_id OPERATIONS.transaction_device_id%TYPE;
     v_start_time OPERATIONS.start_time%TYPE;
     v_end_time OPERATIONS.end_time%TYPE;
     v_active_query VARCHAR2(300);
     v_inactive_query VARCHAR2(300);
     v_OPERATION_ID OPERATIONS.operation_id%TYPE;
+    v_transit_id OPERATIONS.transit_id%TYPE;
 BEGIN
-    v_start_time = new.start_time;
-    v_end_time = new.end_time;
-    v_OPERATION_ID = new.operation_id;
-    IF new.station_id IS NOT NULL AND new.line_id IS NOT NULL THEN
-        v_station_id = new.station_id;
-        v_line_id = new.line_id;
+    v_start_time := :new.start_time;
+    v_end_time := :new.end_time;
+    v_OPERATION_ID := :new.operation_id;
+    IF :new.station_id IS NOT NULL AND :new.line_id IS NOT NULL THEN
+        v_station_id := :new.station_id;
+        v_line_id := :new.line_id;
         
             DBMS_SCHEDULER.CREATE_JOB (
             job_name           => 'STATUS_INACTIVE_STATION_LINE_'||v_station_id||'_'||v_line_id,
@@ -62,11 +64,12 @@ BEGIN
             comments           => 'Job to set status as Active'
             );
         
-    ELSIF new.station_id IS NOT NULL THEN
-            v_station_id = new.station_id;
+    ELSIF :new.station_id IS NOT NULL THEN
+        
+            v_station_id := :new.station_id;
         
             DBMS_SCHEDULER.CREATE_JOB (
-            job_name           => 'STATUS_INACTIVE_STATION_'||v_station_id||,
+            job_name           => 'STATUS_INACTIVE_STATION_'||v_station_id,
             job_type           => 'PLSQL_BLOCK',
             job_action         => 'BEGIN UPDATE TRANSACTION_DEVICE SET status = ''Inactive'' where station_id = '||v_station_id||'; END;',
             start_date         => v_start_time,
@@ -75,7 +78,7 @@ BEGIN
             comments           => 'Job to set status as Inactive'
             );
             DBMS_SCHEDULER.CREATE_JOB (
-            job_name           => 'STATUS_ACTIVE_STATION_'||v_station_id||,
+            job_name           => 'STATUS_ACTIVE_STATION_'||v_station_id,
             job_type           => 'PLSQL_BLOCK',
             job_action         => 'BEGIN UPDATE TRANSACTION_DEVICE SET status = ''Active'' where station_id = '||v_station_id||'; END;',
             start_date         => v_end_time,
@@ -84,8 +87,9 @@ BEGIN
             comments           => 'Job to set status as Active'
             );
         
-    ELSIF new.line_id IS NOT NULL THEN
-            v_line_id = new.line_id;
+    ELSIF :new.line_id IS NOT NULL THEN
+        
+            v_line_id := :new.line_id;
        
             DBMS_SCHEDULER.CREATE_JOB (
             job_name           => 'STATUS_INACTIVE_LINE_'||v_line_id,
@@ -106,7 +110,8 @@ BEGIN
             comments           => 'Job to set status as Active'
             );
         
-    ELSIF new.recharge_id IS NOT NULL THEN   
+    ELSIF :new.recharge_device_id IS NOT NULL THEN
+            v_recharge_device_id := :new.recharge_device_id;
             DBMS_SCHEDULER.CREATE_JOB (
             job_name           => 'STATUS_INACTIVE_RECHARGE_DEVICE_'||v_recharge_device_id,
             job_type           => 'PLSQL_BLOCK',
@@ -125,7 +130,9 @@ BEGIN
             auto_drop          => TRUE,
             comments           => 'Job to set status as Active'
             );
-    ELSIF new.transit_id IS NOT NULL THEN
+        
+    ELSIF :new.transit_id IS NOT NULL THEN
+       v_transit_id := :new.transit_id;
             DBMS_SCHEDULER.CREATE_JOB (
             job_name           => 'STATUS_INACTIVE_TRANSIT_'||v_transit_id,
             job_type           => 'PLSQL_BLOCK',
@@ -144,7 +151,9 @@ BEGIN
             auto_drop          => TRUE,
             comments           => 'Job to set status as Active'
             );
-    ELSIF new.transaction_device_id IS NOT NULL
+       
+    ELSIF :new.transaction_device_id IS NOT NULL THEN
+        v_transaction_device_id := :new.transaction_device_id;
         DBMS_SCHEDULER.CREATE_JOB (
             job_name           => 'STATUS_INACTIVE_TRANSACTION_DEVICE_'||v_transaction_device_id,
             job_type           => 'PLSQL_BLOCK',
@@ -163,6 +172,7 @@ BEGIN
             auto_drop          => TRUE,
             comments           => 'Job to set status as Active'
             );
+       
     ELSE 
         dbms_output.put_line('INVALID OPERATION. REVERTING OPERATION');
         delete from OPERATIONS where operation_id = v_OPERATION_ID;
@@ -172,3 +182,5 @@ BEGIN
         dbms_output.put_line('INVALID OPERATION. REVERTING OPERATION');
         delete from OPERATIONS where operation_id = v_OPERATION_ID;
 END;
+/
+
