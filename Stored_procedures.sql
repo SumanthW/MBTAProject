@@ -3,17 +3,17 @@ CREATE OR REPLACE TRIGGER pass_recharge
     FOR EACH ROW
     WHEN (new.recharge_type = 'Pass')
 DECLARE
-    v_Recharge_Value number;
-    v_RECHARGE_ID number;
-    v_CARD_ID number;
-    v_Number_of_days number;
-    v_PASS_TYPE number;
+    v_Recharge_Value RECHARGE.value_of_transaction%TYPE;
+    v_RECHARGE_ID RECHARGE.recharge_id%TYPE;
+    v_CARD_ID CARD.card_id%TYPE;
+    v_Number_of_days PASS_TYPE.no_of_days%TYPE;
+    v_PASS_TYPE PASS_TYPE.pass_type_id%TYPE;
 BEGIN
-    v_Recharge_Value = new.value_of_transaction;
-    v_RECHARGE_ID = new.recharge_id;
-    v_CARD_ID = select distinct card_id from CARD where wallet_id = new.wallet_id;
-    v_PASS_TYPE = select pass_id from PASS_TYPE where price = v_Recharge_Value;
-    v_Number_of_days = select no_of_days from PASS_TYPE where price = v_Recharge_Value;
+    v_Recharge_Value := :new.value_of_transaction;
+    v_RECHARGE_ID := :new.recharge_id;
+    select MAX(card_id) INTO v_CARD_ID from CARD where wallet_id = :new.wallet_id;
+    select MAX(pass_type_id) INTO v_PASS_TYPE from PASS_TYPE where price = v_Recharge_Value;
+    select MAX(no_of_days) INTO v_Number_of_days from PASS_TYPE where price = v_Recharge_Value;
     
     INSERT INTO Pass(card_id,pass_expiry,pass_type_id, recharge_id, valid_from) values (v_CARD_ID,SYSDATE+v_Number_of_days,v_PASS_TYPE,v_RECHARGE_ID,SYSDATE);
     exception
@@ -21,7 +21,7 @@ BEGIN
             dbms_output.put_line('INVALID TRANSACTION. REVERTING TRANSACTION');
             delete from RECHARGE where recharge_id = v_RECHARGE_ID;
 END;
-
+/
 CREATE OR REPLACE TRIGGER Operations_sequence_trigger
     AFTER INSERT ON OR UPDATE ON OPERATIONS
     FOR EACH ROW
