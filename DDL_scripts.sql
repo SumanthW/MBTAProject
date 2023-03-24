@@ -98,6 +98,13 @@ select 'ForestHill', to_date('29-01-2000','dd-mm-yyyy') from dual union all
 select 'Government Centre', to_date('29-01-2000','dd-mm-yyyy') from dual union all
 select 'Kenmore', to_date('30-01-2000','dd-mm-yyyy') from dual; 
 
+insert into LINE_STATION_CONNECTIONS (line_id, station_id)
+select 2,3 from dual union all
+select 2,2 from dual union all
+select 3,7 from dual;
+
+
+
 /
 
 
