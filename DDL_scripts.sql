@@ -103,7 +103,9 @@ select 2,3 from dual union all
 select 2,2 from dual union all
 select 3,7 from dual;
 
-insert into OPERATIONS ( start_time, end_time, reason, log_timestamp,, transit_id, line_id, station_id, recharge_device_id, transaction_device_id) 
+insert into OPERATIONS ( start_time, end_time, reason, log_timestamp, transit_id, line_id, station_id, recharge_device_id, transaction_device_id) 
+select to_date('010123 12:00:00','DDMMYY HH24:MI:SS'), to_date('010123 17:00:00','DDMMYY HH24:MI:SS'), 'Maintenance', CURRENT_TIMESTAMP, 1, 2, 4, 2, 2 from dual union all
+select to_date('200123 08:00:00','DDMMYY HH24:MI:SS'), to_date('200123 12:00:00','DDMMYY HH24:MI:SS'), 'Maintenance', CURRENT_TIMESTAMP, 2, 5, 7, 2, 2 from dual;
 
 
 /
