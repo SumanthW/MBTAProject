@@ -89,6 +89,15 @@ select 1,'Green line', to_date('01-01-1982','dd-mm-yyyy') from dual union all
 select 2,'Route 57', to_date('06-01-2000','dd-mm-yyyy') from dual union all
 select 2,'Route 66', to_date('30-01-2000','dd-mm-yyyy') from dual;
 
+insert into STATION ( name, contruction_date)
+select 'Ruggles',  to_date('29-01-2000','dd-mm-yyyy') from dual union all
+select 'BackBay', to_date('29-01-2000','dd-mm-yyyy') from dual union all
+select 'Chinatown', to_date('29-01-2000','dd-mm-yyyy') from dual union all
+select 'Downtown Crossing', to_date('29-01-2000','dd-mm-yyyy') from dual union all
+select 'ForestHill', to_date('29-01-2000','dd-mm-yyyy') from dual union all
+select 'Government Centre', to_date('29-01-2000','dd-mm-yyyy') from dual union all
+select 'Kenmore', to_date('30-01-2000','dd-mm-yyyy') from dual; 
+
 /
 
 
