@@ -69,25 +69,18 @@ select 'Bus', 'Active', to_date('29-01-2000','dd-mm-yyyy'), 1.9 from dual union 
 select 'Commuter Rail', 'Active', to_date('20-01-2000','dd-mm-yyyy'), 10 from dual union all
 select 'Ferry', 'Inactive', to_date('30-01-2000','dd-mm-yyyy'), 30 from dual;
 
-insert into RECHARGE_DEVICE (station_id, status) 
-select 2, 'Active' from dual union all
-select 3, 'Inactive' from dual;
+insert into WALLET(wallet_id, wallet_type, wallet_expiry, start_date, status)
+select 1, 'Card', to_date('16-01-2020','dd-mm-yyyy'), to_date('16-01-2000','dd-mm-yyyy'), 'Active' from dual union all
+select 2, 'Ticket', to_date('01-01-2020','dd-mm-yyyy'), to_date('16-07-2000','dd-mm-yyyy'), 'Inactive' from dual union all
+select 3, 'Card', to_date('09-01-2020','dd-mm-yyyy'), to_date('16-09-2000','dd-mm-yyyy'), 'Active' from dual union all
+select 4, 'Ticket', to_date('16-09-2020','dd-mm-yyyy'), to_date('19-01-2000','dd-mm-yyyy'), 'Active' from dual;
 
-insert into TRANSACTION_DEVICE (station_id, line_id, status)
-select 2,3,'Active' from dual union all
-select 1,2,'Inactive' from dual;
-
-insert into TRANSACTION (transaction_type, swipe_time, wallet_id, value, transaction_device_id)
-select 'Balance', to_date('010120 12:00:00','DDMMYY HH24:MI:SS'), 1, 20, 3 from dual union all
-select 'Ride', to_date('010120 11:00:00','DDMMYY HH24:MI:SS'), 2, 30, 4 from dual union all
-select 'Pass', to_date('010120 11:00:00','DDMMYY HH24:MI:SS'), 2, 30, 4 from dual
-
-insert into LINE (line_id, transit_id, name, start_date)
-select 1,1,'Orange line',  to_date('01-01-1980','dd-mm-yyyy') from dual union all
-select 2,1,'Red line', to_date('01-01-1981','dd-mm-yyyy') from dual union all
-select 3,1,'Green line', to_date('01-01-1982','dd-mm-yyyy') from dual union all
-select 4,2,'Route 57', to_date('06-01-2000','dd-mm-yyyy') from dual union all
-select 5,2,'Route 66', to_date('30-01-2000','dd-mm-yyyy') from dual;
+insert into TICKET (ticket_id, wallet_id, rides, transit_id)
+select 1,2,10,1 from dual union all
+select 2,2,15,2 from dual union all
+select 3,2,4,1 from dual union all
+select 4,2,7,3 from dual union all
+select 5,2,2,2 from dual;
 
 insert into STATION (station_id, name, contruction_date)
 select 1,'Ruggles',  to_date('29-01-2000','dd-mm-yyyy') from dual union all
@@ -97,6 +90,44 @@ select 4,'Downtown Crossing', to_date('29-01-2000','dd-mm-yyyy') from dual union
 select 5,'ForestHill', to_date('29-01-2000','dd-mm-yyyy') from dual union all
 select 6,'Government Centre', to_date('29-01-2000','dd-mm-yyyy') from dual union all
 select 7,'Kenmore', to_date('30-01-2000','dd-mm-yyyy') from dual; 
+
+insert into CARD (card_id, balance, wallet_id)
+select 1,24.00,1 from dual union all
+select 2,9.60,1 from dual union all
+select 3,14.40,1 from dual union all
+select 4,4.80,1 from dual union all
+select 5,2.40,1 from dual;
+
+insert into RECHARGE_DEVICE (station_id, status) 
+select 2, 'Active' from dual union all
+select 3, 'Inactive' from dual;
+
+insert into RECHARGE (recharge_id, value_of_transaction, wallet_id, transaction_time, recharge_type, recharge_device_id)
+select 1, 2.9, 2, to_date('010120 12:00:00','DDMMYY HH24:MI:SS'), 'Top-up', 1 from dual union all
+select 2, 10, 1, to_date('010120 11:00:00','DDMMYY HH24:MI:SS'), 'Ride', 1 from dual union all
+select 3, 90, 3, to_date('010120 10:00:00','DDMMYY HH24:MI:SS'), 'Pass', 1 from dual union all
+select 4, 5, 2, to_date('010120 09:00:00','DDMMYY HH24:MI:SS'), 'Top-up', 1 from dual union all
+select 5, 2.9, 4, to_date('010120 12:00:00','DDMMYY HH24:MI:SS'), 'Ride', 1 from dual
+
+insert into PASS (pass_id, card_id, pass_expiry, pass_type_id, valid_from, recharge_id)
+
+
+insert into LINE (line_id, transit_id, name, start_date)
+select 1,1,'Orange line',  to_date('01-01-1980','dd-mm-yyyy') from dual union all
+select 2,1,'Red line', to_date('01-01-1981','dd-mm-yyyy') from dual union all
+select 3,1,'Green line', to_date('01-01-1982','dd-mm-yyyy') from dual union all
+select 4,2,'Route 57', to_date('06-01-2000','dd-mm-yyyy') from dual union all
+select 5,2,'Route 66', to_date('30-01-2000','dd-mm-yyyy') from dual;
+
+insert into TRANSACTION_DEVICE (station_id, line_id, status)
+select 2,3,'Active' from dual union all
+select 1,2,'Inactive' from dual;
+
+insert into TRANSACTION (transaction_type, swipe_time, wallet_id, value, transaction_device_id)
+select 'Balance', to_date('010120 12:00:00','DDMMYY HH24:MI:SS'), 1, 20, 3 from dual union all
+select 'Ride', to_date('010120 11:00:00','DDMMYY HH24:MI:SS'), 2, 30, 4 from dual union all
+select 'Pass', to_date('010120 11:00:00','DDMMYY HH24:MI:SS'), 2, 30, 4 from dual;
+
 
 insert into LINE_STATION_CONNECTIONS (connections_id, line_id, station_id)
 select 1,2,3 from dual union all
