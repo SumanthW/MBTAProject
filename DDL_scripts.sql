@@ -78,7 +78,7 @@ select 2,3,'Active' from dual union all
 select 1,2,'Inactive' from dual;
 
 insert into TRANSACTION (transaction_type, swipe_time, wallet_id, value, transaction_device_id)
-select 'Card_Balance', to_date('010120 12:00:00','DDMMYY HH24:MI:SS'), 1, 20, 3 from dual union all
+select 'Balance', to_date('010120 12:00:00','DDMMYY HH24:MI:SS'), 1, 20, 3 from dual union all
 select 'Ride', to_date('010120 11:00:00','DDMMYY HH24:MI:SS'), 2, 30, 4 from dual union all
 select 'Pass', to_date('010120 11:00:00','DDMMYY HH24:MI:SS'), 2, 30, 4 from dual
 
