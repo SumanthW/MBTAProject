@@ -82,7 +82,7 @@ select 3,2,4,1 from dual union all
 select 4,2,7,3 from dual union all
 select 5,2,2,2 from dual;
 
-insert into STATION (station_id, name, contruction_date)
+insert into STATION (station_id, name, construction_date)
 select 1,'Ruggles',  to_date('29-01-2000','dd-mm-yyyy') from dual union all
 select 2,'BackBay', to_date('29-01-2000','dd-mm-yyyy') from dual union all
 select 3,'Chinatown', to_date('29-01-2000','dd-mm-yyyy') from dual union all
