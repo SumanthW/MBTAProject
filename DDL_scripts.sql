@@ -114,10 +114,10 @@ select 1,10, 1, '1-day' from dual union all
 select 2, 90 , '7-day' from dual union all
 select 3, 180, '30-day' from dual;
 
-insert into PASS (pass_id, card_id, valid_from, pass_type_id, expiry_date, recharge_id)
-select 1, 1, to_date('01-01-2000','dd-mm-yyyy'), 1, to_date('01-01-2050','dd-mm-yyyy'),3 from dual union all
-select 2, 3, to_date('01-10-2000','dd-mm-yyyy'), 2, to_date('01-10-2050','dd-mm-yyyy'),1 from dual union all
-select 3, 5, to_date('01-07-2000','dd-mm-yyyy'), 3, to_date('01-07-2050','dd-mm-yyyy'),3 from dual;
+insert into PASS (pass_id, card_id, expiry_date, pass_type_id, valid_from, recharge_id)
+select 1, 1, to_date('01-01-2050','dd-mm-yyyy'), 1, to_date('01-01-2020','dd-mm-yyyy'),3 from dual union all
+select 2, 3, to_date('01-10-2050','dd-mm-yyyy'), 2,  to_date('01-10-2020','dd-mm-yyyy'),1 from dual union all
+select 3, 5, to_date('01-07-2050','dd-mm-yyyy'), 3, to_date('01-07-2020','dd-mm-yyyy'),3 from dual;
 
 insert into LINE (line_id, transit_id, name, start_date)
 select 1,1,'Orange line',  to_date('01-01-1980','dd-mm-yyyy') from dual union all
