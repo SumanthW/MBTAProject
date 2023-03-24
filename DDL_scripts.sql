@@ -83,25 +83,25 @@ select 'Ride', to_date('010120 11:00:00','DDMMYY HH24:MI:SS'), 2, 30, 4 from dua
 select 'Pass', to_date('010120 11:00:00','DDMMYY HH24:MI:SS'), 2, 30, 4 from dual
 
 insert into LINE (line_id, transit_id, name, start_date)
-select 1,'Orange line',  to_date('01-01-1980','dd-mm-yyyy') from dual union all
-select 1,'Red line', to_date('01-01-1981','dd-mm-yyyy') from dual union all
-select 1,'Green line', to_date('01-01-1982','dd-mm-yyyy') from dual union all
-select 2,'Route 57', to_date('06-01-2000','dd-mm-yyyy') from dual union all
-select 2,'Route 66', to_date('30-01-2000','dd-mm-yyyy') from dual;
+select 1,1,'Orange line',  to_date('01-01-1980','dd-mm-yyyy') from dual union all
+select 2,1,'Red line', to_date('01-01-1981','dd-mm-yyyy') from dual union all
+select 3,1,'Green line', to_date('01-01-1982','dd-mm-yyyy') from dual union all
+select 4,2,'Route 57', to_date('06-01-2000','dd-mm-yyyy') from dual union all
+select 5,2,'Route 66', to_date('30-01-2000','dd-mm-yyyy') from dual;
 
 insert into STATION (station_id, name, contruction_date)
-select 'Ruggles',  to_date('29-01-2000','dd-mm-yyyy') from dual union all
-select 'BackBay', to_date('29-01-2000','dd-mm-yyyy') from dual union all
-select 'Chinatown', to_date('29-01-2000','dd-mm-yyyy') from dual union all
-select 'Downtown Crossing', to_date('29-01-2000','dd-mm-yyyy') from dual union all
-select 'ForestHill', to_date('29-01-2000','dd-mm-yyyy') from dual union all
-select 'Government Centre', to_date('29-01-2000','dd-mm-yyyy') from dual union all
-select 'Kenmore', to_date('30-01-2000','dd-mm-yyyy') from dual; 
+select 1,'Ruggles',  to_date('29-01-2000','dd-mm-yyyy') from dual union all
+select 2,'BackBay', to_date('29-01-2000','dd-mm-yyyy') from dual union all
+select 3,'Chinatown', to_date('29-01-2000','dd-mm-yyyy') from dual union all
+select 4,'Downtown Crossing', to_date('29-01-2000','dd-mm-yyyy') from dual union all
+select 5,'ForestHill', to_date('29-01-2000','dd-mm-yyyy') from dual union all
+select 6,'Government Centre', to_date('29-01-2000','dd-mm-yyyy') from dual union all
+select 7,'Kenmore', to_date('30-01-2000','dd-mm-yyyy') from dual; 
 
 insert into LINE_STATION_CONNECTIONS (connections_id, line_id, station_id)
-select 2,3 from dual union all
-select 2,2 from dual union all
-select 3,7 from dual;
+select 1,2,3 from dual union all
+select 2,2,2 from dual union all
+select 3,3,7 from dual;
 
 insert into OPERATIONS ( operation_id, start_time, end_time, reason, log_timestamp, transit_id, line_id, station_id, recharge_device_id, transaction_device_id) 
 select to_date('010123 12:00:00','DDMMYY HH24:MI:SS'), to_date('010123 17:00:00','DDMMYY HH24:MI:SS'), 'Maintenance', CURRENT_TIMESTAMP, 1, 2, 4, 2, 2 from dual union all
