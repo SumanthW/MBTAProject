@@ -182,5 +182,20 @@ BEGIN
         dbms_output.put_line('INVALID OPERATION. REVERTING OPERATION');
         delete from OPERATIONS where operation_id = v_OPERATION_ID;
 END;
+
 /
+
+
+
+
+CREATE OR REPLACE PROCEDURE recharge_card (p_wallet_id NUMBER, p_value_of_transaction NUMBER,recharge_type varchar)
+IS
+BEGIN
+if recharge_type = 'Top-up'
+then
+  UPDATE CARD
+     SET Balance = Balance + p_value_of_transaction
+   WHERE wallet_id = p_wallet_id;
+end if
+END recharge_card;
 
