@@ -11,11 +11,8 @@ Final Project for Database Mangement and Database Design - INFO6210
 |Shrimoyee Banerjee |	banerjee.sh@northeastern.edu
 |Chunhao Hu| hu.chunh@northeastern.edu
 
-## OVERVIEW 
-- The Massachusetts Bay Transportation Authority, more commonly known as the T, is one of
-the oldest public transit systems in the United States. Thousands of people buy tickets and use
-‘Charlie cards’ to access and travel by the trains everyday.
-The MBTA database management system project involves the development and implementation
+## PROJECT DESCRIPTION
+- The MBTA database management system project involves the development and implementation
 of a centralized database to store and manage information related to the operations of the MBTA.
 This can include data on routes, ticketing, finances and operations. The goal of the project is to
 provide a single source of truth for all relevant data and to improve the efficiency and accuracy
@@ -26,6 +23,19 @@ also the transactions in the stations with their timestamps and value. In Additi
 shows the operations whether the line and station is active or inactive due to construction or any
 other difficulties so that it's easy for the people to travel as well as it helps solve business
 problems and gather reports.
+
+## OBJECTIVE 
+
+1. To design a relational database that can store，manage, and retrieve MBTA information
+about stations, cards, tickets, recharging, check-in and lines in a secure and efficient
+manner.
+2. The database should be able to provide information to monitor everyday operations,
+provide an overview of business statistics over a period, and help identify potential
+growth points for the MBTA system.
+3. The system should enable commuting via various recharge types i.e., Rides, Passes and
+Wallet balance top up.
+4. The system should discard/detect fraudulent transactions made by 3rd party intrusions by
+identifying the recharge device used for the recharge action.
 
 ## FINAL ER DIAGRAM
 ![ERD](images/ERD.png)
@@ -51,6 +61,10 @@ Database - Oracle
 
 
 ### References
+- https://download.oracle.com/oll/tutorials/SQLDeveloper/index.htm
+- https://www.geeksforgeeks.org/sql-tutorial/
+- https://www.geeksforgeeks.org/sql-ddl-dql-dml-dcl-tcl-commands/
+
 
 
 
