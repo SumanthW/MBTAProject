@@ -157,3 +157,15 @@ select 1,to_date('010123 01:00:00','DDMMYY HH24:MI:SS'), to_date('010123 05:00:0
 select 2,to_date('010124 11:00:00','DDMMYY HH24:MI:SS'), to_date('010122 19:00:00','DDMMYY HH24:MI:SS'), 'Maintenance', CURRENT_TIMESTAMP, NULL, 2, NULL, NULL, NULL from dual;
 
 /
+create view passtype_year as (
+select Pass_Type,count(*) AS CNT from (
+select pass_id,Pass_Type, EXTRACT(YEAR from transaction_time ) as buy_year from PASS 
+left join Recharge
+on pass.recharge_id=Recharge.recharge_id
+WHERE buy_year = '2023'
+)
+group by Pass_Type
+);
+
+create view  total_downtime as (
+select sum(cast (end_time as date))-sum(cast(start_time as date)) from operations where end_time is not null);
