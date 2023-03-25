@@ -157,3 +157,12 @@ select 1,to_date('010123 01:00:00','DDMMYY HH24:MI:SS'), to_date('010123 05:00:0
 select 2,to_date('010124 11:00:00','DDMMYY HH24:MI:SS'), to_date('010122 19:00:00','DDMMYY HH24:MI:SS'), 'Maintenance', CURRENT_TIMESTAMP, NULL, 2, NULL, NULL, NULL from dual;
 
 /
+
+CREATE OR REPLACE VIEW travels_per_year_per_transit as
+(select name, A.YR as year, count(A.transaction_id) as travels
+from (select transaction_id, transit.name, EXTRACT(YEAR FROM swipe_time) YR 
+from transaction 
+join transaction_device on transaction.transaction_device_id = transaction_device.transaction_device_id
+join line on line.line_id = transaction_device.line_id
+join transit on line.transit_id = transit.transit_id) A
+group by A.YR,A.name);
