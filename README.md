@@ -28,7 +28,7 @@ other difficulties so that it's easy for the people to travel as well as it help
 problems and gather reports.
 
 ## FINAL ER DIAGRAM
-![ERD](images/.jpeg)
+![ERD](images/.png)
 
 ### Steps to run the project locally:
 
