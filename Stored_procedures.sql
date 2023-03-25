@@ -185,9 +185,6 @@ END;
 
 /
 
-
-
-
 CREATE OR REPLACE PROCEDURE recharge_card (p_wallet_id NUMBER, p_value_of_transaction NUMBER,recharge_type varchar)
 IS
 BEGIN
@@ -198,4 +195,55 @@ then
    WHERE wallet_id = p_wallet_id;
 end if
 END recharge_card;
+/
+
+CREATE OR REPLACE PROCEDURE Transaction_logging
+(
+    wallet_id IN NUMBER,
+    transaction_device_id IN NUMBER
+)
+IS
+    v_balance NUMBER;
+    v_wallet_type WALLET.wallet_type%TYPE;
+    v_transaction_device_status TRANSACTION_DEVICE.status%TYPE;
+    v_ride_price TRANSIT.price_per_ride%TYPE;
+BEGIN
+    BEGIN
+        select wallet_type INTO v_wallet_type from WALLET where wallet_id = :wallet_id;
+        select status into v_transaction_device_status from TRANSACTION_DEVICE where transaction_device_id = :transaction_device_id;
+        IF v_transaction_device_status = 'Inactive' THEN
+            dbms_output.put_line('Unable to transact due to operations! Try again after down-time.');
+            RAISE;
+        END IF;
+        IF v_wallet_type = 'Card' THEN
+            select balance into v_balance from CARD where CARD.wallet_id = :wallet_id;
+            select MAX(price_per_ride) into v_ride_price from TRANSIT 
+            join line on TRANSIT.transit_id = line.transit_id
+            join transaction_device on line.line_id = transaction_device.line_id and transaction_device_id = :transaction_device_id;
+            
+            IF (select distinct pass_id from PASS where pass_expiry > SYSDATE and card_id = (select max(card_id) from CARD where wallet_id = :wallet_id)) IS NOT NULL THEN
+                insert into transaction(transaction_type, swipe_time, wallet_id, value, transaction_device_id)
+                select 'Pass',CURRENT_TIMESTAMP, :wallet_id, 0, :transaction_device_id from dual;
+            ELSIF v_ride_price <= v_balance THEN
+                insert into transaction(transaction_type, swipe_time, wallet_id, value, transaction_device_id)
+                select 'Balance',CURRENT_TIMESTAMP, :wallet_id, v_ride_price, :transaction_device_id from dual;
+            ELSE
+                dbms_output.put_line('Insuffient balance.');
+        SELECT balance INTO balance FROM Wallets WHERE wallet_id = wallet_id FOR UPDATE;
+
+        IF balance < amount THEN
+            RAISE_APPLICATION_ERROR(-20001, 'Insufficient funds in wallet');
+        END IF;
+
+        INSERT INTO Transactions (wallet_id, amount, ride_count) VALUES (wallet_id, amount, ride_count);
+
+        UPDATE Wallets SET balance = balance - amount, ride_count = ride_count - ride_count WHERE wallet_id = wallet_id;
+
+        COMMIT;
+    EXCEPTION
+        WHEN OTHERS THEN
+            ROLLBACK;
+            RAISE;
+    END;
+END;
 
