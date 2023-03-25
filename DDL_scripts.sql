@@ -198,15 +198,14 @@ FROM (
 ) ranked
 WHERE revenue_rank <= 5
 group by swipe_year;
-select * from wallet_details;
 
 CREATE VIEW WALLET_DETAILS AS
-select wallet_id, wallet_type,start_date,status,pass_expiry,name as PASS_NAME, BALANCE_OR_RIDES from(
+select temp3.wallet_id,temp3.wallet_type,temp3.status,temp3.pass_expiry,temp3.pass_name,temp3.balance,temp3.rides,temp4.swipe from (select wallet_id, wallet_type,start_date,status,pass_expiry,name as PASS_NAME, BALANCE , RIDES from(
 select * from(
-(select w.wallet_id,w.wallet_type,w.wallet_expiry,w.start_date,w.status,c.card_id as ID,c.balance as BALANCE_OR_RIDES from wallet w
+(select w.wallet_id,w.wallet_type,w.wallet_expiry,w.start_date,w.status,c.card_id as ID,c.balance, NULL as RIDES from wallet w
 join card c on  c.wallet_id = w.wallet_id union all
-select w.wallet_id,w.wallet_type, w.wallet_expiry,w.start_date,w.status, t.ticket_id as ID,t.rides as BALANCE_OR_RIDES from wallet w
-join ticket t on t.wallet_id = w.wallet_id))temp left outer join pass p on p.card_id=temp.ID and wallet_type='Card')temp2 left outer join pass_type pt on temp2.pass_type_id=pt.pass_type_id ORDER BY wallet_id;
+select w.wallet_id,w.wallet_type, w.wallet_expiry,w.start_date,w.status, t.ticket_id as ID,NuLL,t.rides from wallet w
+join ticket t on t.wallet_id = w.wallet_id))temp left outer join pass p on p.card_id=temp.ID and wallet_type='Card')temp2 left outer join pass_type pt on temp2.pass_type_id=pt.pass_type_id)temp3 left outer join (select max(swipe_time) as swipe, wallet_id from transaction group by wallet_id) temp4 on temp4.wallet_id = temp3.wallet_id;
 
 
 CREATE VIEW FRAUDULENT_RECHARGE AS 
