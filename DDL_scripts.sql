@@ -157,4 +157,3 @@ select 1,to_date('010123 01:00:00','DDMMYY HH24:MI:SS'), to_date('010123 05:00:0
 select 2,to_date('010124 11:00:00','DDMMYY HH24:MI:SS'), to_date('010122 19:00:00','DDMMYY HH24:MI:SS'), 'Maintenance', CURRENT_TIMESTAMP, NULL, 2, NULL, NULL, NULL from dual;
 
 /
-
