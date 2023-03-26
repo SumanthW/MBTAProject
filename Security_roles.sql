@@ -341,31 +341,3 @@ grant select on junction to L1_officer;
 
 
 
---create group member user identity and grant space and PRIVILEGES
-
-
-
-
-create user H identified by abcd12341234A;
-
-create user G identified by abcd12341234A;
-
-create user Su identified by abcd12341234A;
-
-CREATE USER SHR IDENTIFIED BY abcd12341234A;
-
-grant connect, resource to H;
-
-grant connect, resource to G;
-
-grant connect, resource to Su;
-
-grant connect, resource to SHR;
-
-ALTER USER H QUOTA 1000 M ON data;
-
-ALTER USER G QUOTA 1000 M ON data;
-
-ALTER USER Su QUOTA 1000 M ON data;
-
-ALTER USER SHR QUOTA 1000 M ON data;
