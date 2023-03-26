@@ -169,12 +169,46 @@ group by A.YR,A.name);
 
 create or replace view passtype_year as (
 select Pass_Type_id,count(*) AS CNT, buy_year from (
-select pass_id,Pass_Type_id, EXTRACT(YEAR from transaction_time ) as buy_year from PASS 
+select pass_id,Pass_Type_id, EXTRACT(YEAR from transaction_time ) as buy_year from PASS 
 left join Recharge
 on pass.recharge_id=Recharge.recharge_id
 )
 group by Pass_Type_id, buy_year
 );
 
-create view  total_downtime as (
-select sum(cast (end_time as date))-sum(cast(start_time as date)) from operations where end_time is not null);
+SELECT * FROM transit;
+select * from TOTAL_DOWNTIME;
+SELECT * from LINE_STATION_CONNECTIONS ;
+
+CREATE OR REPLACE VIEW passtype_year AS (
+  SELECT Pass_Type_id, COUNT(*) AS CNT, buy_year
+  FROM (
+    SELECT pass_id, Pass_Type_id, EXTRACT(YEAR FROM transaction_time) AS buy_year
+    FROM PASS
+    LEFT JOIN Recharge
+    ON pass.recharge_id = Recharge.recharge_id
+  )
+  GROUP BY Pass_Type_id, buy_year
+);
+
+create or replace view  total_downtime as (
+select sum(cast (end_time as date)-cast(start_time as date)) as downtime from operations where end_time is not null);
+
+CREATE OR REPLACE VIEW junction AS (
+  SELECT transit.transit_id, transit.name, t1.station_id
+  FROM LINE_STATION_CONNECTIONS t1
+  JOIN LINE_STATION_CONNECTIONS t2 ON t1.station_id = t2.station_id
+  JOIN line ON line.line_id = t1.line_id
+  JOIN transit ON transit.transit_id = line.transit_id
+  WHERE t1.line_id != t2.line_id
+);
+
+CREATE OR REPLACE VIEW staion_in_a_line as(
+select LINE_STATION_CONNECTIONS.line_id, listagg(station.name) station_sequence from LINE_STATION_CONNECTIONS
+join station on LINE_STATION_CONNECTIONS.station_id = station.station_id
+group by line_id);
+
+CREATE OR REPLACE VIEW total_revenue_year as(
+select extract (year from transaction_time) as year, sum(value_of_transaction) total_revenue from recharge
+group by extract (year from transaction_time)
+);
