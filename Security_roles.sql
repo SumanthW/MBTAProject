@@ -296,53 +296,41 @@ grant select on junctions to L1_officer;
 
 create role L2_officer;
 
-grant all on Pass_Type to L2_officeri;
+grant all on Pass_Type to L2_officer;
 
-grant all on Pass to L2_officeri;
+grant all on Pass to L2_officer;
 
-grant all on Wallet to L2_officeri;
+grant all on Wallet to L2_officer;
 
-grant all on Ticket to L2_officeri;
+grant all on Ticket to L2_officer;
 
-grant all on Card to L2_officeri;
+grant all on Card to L2_officer;
 
-grant all on Recharge to L2_officeri;
+grant all on Recharge to L2_officer;
 
-grant all on Transaction to L2_officeri;
+grant all on Transaction to L2_officer;
 
-grant all on Recharge_Device to L2_officeri;
+grant all on Recharge_Device to L2_officer;
 
-grant all on Transaction_Device to L2_officeri;
+grant all on Transaction_Device to L2_officer;
 
-grant all on Operations to L2_officeri;
+grant all on Operations to L2_officer;
 
-grant all on Transit to L2_officeri;
+grant all on Transit to L2_officer;
 
-grant all on Line to L2_officeri;
+grant all on Line to L2_officer;
 
-grant all on Station to L2_officeri;
+grant all on Station to L2_officer;
 
-grant all on Line_station_connections to L2_officeri;
+grant all on Line_station_connections to L2_officer;
 
   -- Views grant--
 
-grant select on TOP_FIVE_BUSY_STATIONS to L2_officeri;
+grant select on TOP_FIVE_BUSY_STATIONS to L2_officer;
 
-grant select on stations_in_a_line to L1_officer;
+grant select on stations_in_a_line to L2_officer;
 
-grant select on junctions to L1_officer;
-
-
-
-
-
-
-
-
-
-
-
-ALTER USER SHR QUOTA 1000 M ON data;
+grant select on junctions to L2_officer;
 
 commit;
 
