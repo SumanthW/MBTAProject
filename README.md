@@ -38,7 +38,7 @@ Wallet balance top up.
 identifying the recharge device used for the recharge action.
 
 ## FINAL ER DIAGRAM
-![ERD](images/ERD.png)
+![ERD]("C:\Users\Shrimoyee\OneDrive\Desktop\MBTAProject\images\ERD.png")
 
 ### Steps to run the project locally:
 
