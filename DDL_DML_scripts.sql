@@ -1771,4 +1771,5 @@ select 1, 'Balance', to_date('010120 12:00:00','DDMMYY HH24:MI:SS'), 1, 20, 1 fr
 select 2, 'Ride', to_date('010120 11:00:00','DDMMYY HH24:MI:SS'), 2, 30, 2 from dual union all
 select 3, 'Pass', to_date('010120 11:00:00','DDMMYY HH24:MI:SS'), 1, 30, 1 from dual;
 
+commit;
 /
