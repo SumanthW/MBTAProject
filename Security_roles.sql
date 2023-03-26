@@ -1,5 +1,41 @@
 --create roles and grant every role correspoding PRIVILEGES on table and VIEW
 
+--CLEAN UP SCRIPT
+set serveroutput on
+declare
+    v_table_exists varchar(1) := 'Y';
+    v_sql varchar(2000);
+begin
+   dbms_output.put_line('Start schema cleanup');
+   for i in (select 'admini' role_name from dual union all
+             select 'developer' role_name from dual union all
+             select 'QA' role_name from dual union all
+             select 'transit_officer' role_name from dual union all
+             select 'finance_officer' role_name from dual union all
+             select 'L1_officer' role_name from dual union all
+             select 'L2_officer' role_name from dual             
+   )
+   loop
+   dbms_output.put_line('....Dropping role '||i.role_name);
+   begin
+       
+       v_sql := 'drop role '||i.role_name;
+       execute immediate v_sql;
+       dbms_output.put_line('........Role '||i.role_name||' dropped successfully');
+       
+   exception
+       when no_data_found then
+           dbms_output.put_line('........Role already dropped');
+   end;
+   end loop;
+   dbms_output.put_line('Schema cleanup successfully completed');
+exception
+   when others then
+      dbms_output.put_line('Failed to execute code:'||sqlerrm);
+end;
+/
+
+
 create role admini;
 
 grant all on Pass_Type to admini;
@@ -30,7 +66,7 @@ grant all on Station to admini;
 
 grant all on Line_station_connections to admini;
 
-grant all on travels_per_year_per_transit to admini;   -- Views grant--  
+grant all on travels_per_year_per_transit to admini;   -- Views grant--  
 
 grant all on total_downtime to admini; 
 
@@ -92,7 +128,7 @@ grant all on Station to developer;
 
 grant all on Line_station_connections to developer;
 
-grant all on travels_per_year_per_transit to developer;   -- Views grant--
+grant all on travels_per_year_per_transit to developer;   -- Views grant--
 
 grant all on total_downtime to developer;
 
@@ -119,7 +155,7 @@ grant all on stations_in_a_line to developer;
 
 
 
- 
+ 
 
 
 
@@ -154,7 +190,7 @@ grant select on Station to QA;
 
 grant select on Line_station_connections to QA;
 
-grant select on travels_per_year_per_transit to QA;   -- Views grant--
+grant select on travels_per_year_per_transit to QA;   -- Views grant--
 
 grant select on total_downtime to QA;
 
@@ -189,7 +225,7 @@ grant select on stations_in_a_line to QA;
 
 create role transit_officer;
 
-grant select on operation to transit_officer;
+grant select on operations to transit_officer;
 
 grant select on Line to transit_officer;
 
@@ -199,7 +235,7 @@ grant select on Station to transit_officer;
 
 grant select on Line_station_connections to transit_officer;
 
-grant select on WALLET_DETAILS to transit_officer; -- VIEWS--  
+grant select on WALLET_DETAILS to transit_officer; -- VIEWS--  
 
 grant select on FRAUDULENT_RECHARGES to transit_officer;
 
@@ -275,7 +311,7 @@ grant select,update, insert, delete on Station to L1_officer;
 
 grant select,update, insert, delete on Line_station_connections to L1_officer;
 
-grant select on travels_per_year_per_transit to L1_officer;   -- Views grant--
+grant select on travels_per_year_per_transit to L1_officer;   -- Views grant--
 
 grant select on total_downtime to L1_officer; 
 
@@ -324,7 +360,7 @@ grant all on Station to L2_officer;
 
 grant all on Line_station_connections to L2_officer;
 
-  -- Views grant--
+  -- Views grant--
 
 grant select on TOP_FIVE_BUSY_STATIONS to L2_officer;
 
@@ -333,4 +369,3 @@ grant select on stations_in_a_line to L2_officer;
 grant select on junctions to L2_officer;
 
 commit;
-
