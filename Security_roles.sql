@@ -3,7 +3,7 @@
 --CLEAN UP SCRIPT
 set serveroutput on
 declare
-    v_table_exists varchar(1) := 'Y';
+    
     v_sql varchar(2000);
 begin
    dbms_output.put_line('Start schema cleanup');
