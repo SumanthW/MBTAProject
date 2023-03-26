@@ -1,4 +1,3 @@
-
 --create roles and grant every role correspoding PRIVILEGES on table and VIEW
 
 create role admini;
@@ -51,9 +50,9 @@ grant all on FRAUDULENT_RECHARGES to admini;
 
 grant all on favorite_pass_of_the_year to admini; 
 
-grant all on junction to admini; 
+grant all on junctions to admini; 
 
-grant all on staion_in_a_line to admini; 
+grant all on stations_in_a_line to admini; 
 
 
 
@@ -113,9 +112,9 @@ grant all on FRAUDULENT_RECHARGES to developer;
 
 grant all on favorite_pass_of_the_year to developer;
 
-grant all on junction to developer;
+grant all on junctions to developer;
 
-grant all on staion_in_a_line to developer;
+grant all on stations_in_a_line to developer;
 
 
 
@@ -175,9 +174,9 @@ grant select on FRAUDULENT_RECHARGES to QA;
 
 grant select on favorite_pass_of_the_year to QA;
 
-grant select on junction to QA;
+grant select on junctions to QA;
 
-grant select on staion_in_a_line to QA;
+grant select on stations_in_a_line to QA;
 
 
 
@@ -204,9 +203,9 @@ grant select on WALLET_DETAILS to transit_officer; -- VIEWS--  
 
 grant select on FRAUDULENT_RECHARGES to transit_officer;
 
-grant select on junction to transit_officer;
+grant select on junctions to transit_officer;
 
-grant select on staion_in_a_line to transit_officer;
+grant select on stations_in_a_line to transit_officer;
 
 
 
@@ -243,7 +242,7 @@ grant select on REVENUE_YEAR_TRANSIT to finance_officer;
 
 grant select on TOP_FIVE_BUSY_STATIONS to finance_officer;
 
-grant select on junction to finance_officer;
+grant select on junctions to finance_officer;
 
 grant select on travels_per_year_per_transit to finance_officer;
 
@@ -284,9 +283,9 @@ grant select on TOP_FIVE_BUSY_STATIONS to L1_officer;
 
 grant select on FRAUDULENT_RECHARGES to L1_officer;
 
-grant select on staion_in_a_line to L1_officer;
+grant select on stations_in_a_line to L1_officer;
 
-grant select on junction to L1_officer;
+grant select on junctions to L1_officer;
 
 
 
@@ -329,9 +328,10 @@ grant all on Line_station_connections to L2_officeri;
 
 grant select on TOP_FIVE_BUSY_STATIONS to L2_officeri;
 
-grant select on staion_in_a_line to L1_officer;
+grant select on stations_in_a_line to L1_officer;
 
-grant select on junction to L1_officer;
+grant select on junctions to L1_officer;
+
 
 
 
