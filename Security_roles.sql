@@ -341,3 +341,8 @@ grant select on junctions to L1_officer;
 
 
 
+
+ALTER USER SHR QUOTA 1000 M ON data;
+
+commit;
+

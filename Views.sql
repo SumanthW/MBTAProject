@@ -119,7 +119,7 @@ join recharge_device rd on rd.recharge_device_id = r.recharge_device_id where r.
 
 --View to know which was the pass purchased by a lot of people in a particular year--
 
-CREATE OR REPLACE VIEW favorite_pass_of_year AS (
+CREATE OR REPLACE VIEW favorite_pass_of_the_year AS (
 select name,year from 
     (select A.name, year, RANK() OVER(PARTITION BY YEAR ORDER BY CNT DESC) as RNK 
         from ( select PT.name, EXTRACT(YEAR from valid_from) year,count(pass_id) CNT 

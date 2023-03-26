@@ -37,8 +37,6 @@ Wallet balance top up.
 4. The system should discard/detect fraudulent transactions made by 3rd party intrusions by
 identifying the recharge device used for the recharge action.
 
-## FINAL ER DIAGRAM
-![ERD](images/ERD.png)
 
 ### Steps to run the project locally:
 
@@ -46,11 +44,11 @@ identifying the recharge device used for the recharge action.
 
   "https://github.com/SumanthW/MBTAProject.git"
 
-2. Run Security_roles.sql file to grant user permissions 
+2. Run DDL_DML_scripts.sql file to execute DDL and DML queries  
 
-3. Run DDL_DML.sql file to execute DDL and DML queries  
+3. To create views run queries from Views.sql 
 
-4. To create views run queries from Views.sql
+4. Run Security_roles.sql file to grant user permissions on database objects and assets
 
 5. Working on Stored_procedures.sql(In Process)
 
