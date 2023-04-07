@@ -311,6 +311,22 @@ RETURN v_present;
 END;
 /
 
+CREATE OR REPLACE FUNCTION which_transit(i_station_id number)
+RETURN varchar2
+IS
+v_transit_type varchar2(20);
+BEGIN
+    select max(t.name) into v_transit_type from transit t join line l on t.transit_id = l.transit_id
+    join line_station_connections ls on ls.line_id = l.line_id
+    join station s on s.station_id = ls.station_id and s.station_id = i_station_id;
+    
+    RETURN v_transit_type;
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN    
+    RETURN NULL;
+END;
+/
+
 CREATE OR REPLACE PROCEDURE recharge_card (p_wallet_id NUMBER, p_value_of_transaction NUMBER,recharge_type varchar)
 IS
 BEGIN
