@@ -198,6 +198,75 @@ END;
 
 /
 
+CREATE OR REPLACE FUNCTION is_facility_up
+(facility IN varchar2,
+facility_id IN number)
+RETURN varchar2
+IS 
+v_id_present number;
+BEGIN
+
+IF facility = 'Transit' THEN
+    BEGIN
+    select transit_id into v_id_present from transit where transit_id = facility_id;
+    EXCEPTION WHEN NO_DATA_FOUND THEN
+        v_id_present := NULL;
+    END;
+    IF (v_id_present IS NOT NULL) THEN
+        RETURN 'True';
+    ELSE
+        RETURN 'False';
+    END IF;
+ELSIF facility = 'Line' THEN
+    BEGIN
+    select line_id into v_id_present from operations where line_id = facility_id and systimestamp AT TIME ZONE 'GMT'  between start_time and end_time;
+    EXCEPTION WHEN NO_DATA_FOUND THEN
+        v_id_present := NULL;
+    END;
+    IF (v_id_present IS NULL) THEN
+        RETURN 'True';
+    ELSE
+        RETURN 'False';
+    END IF;
+ELSIF facility = 'Station' THEN
+    BEGIN
+    select station_id into v_id_present from operations where station_id = facility_id and systimestamp AT TIME ZONE 'GMT' between start_time and end_time;
+    EXCEPTION WHEN NO_DATA_FOUND THEN
+        v_id_present := NULL;
+    END;
+    IF (v_id_present IS NULL) THEN
+        RETURN 'True';
+    ELSE
+        RETURN 'False';
+    END IF;
+ELSIF facility = 'Recharge_device' THEN
+    BEGIN
+    select recharge_device_id into v_id_present from operations where recharge_device_id = facility_id and systimestamp AT TIME ZONE 'GMT'  between start_time and end_time;
+    EXCEPTION WHEN NO_DATA_FOUND THEN
+        v_id_present := NULL;
+    END;
+    IF (v_id_present IS NULL) THEN
+        RETURN 'True';
+    ELSE
+        RETURN 'False';
+    END IF;
+ELSIF facility = 'Transaction_device' THEN
+    BEGIN
+    select transaction_device_id into v_id_present from operations where transaction_device_id = facility_id and systimestamp AT TIME ZONE 'GMT'  between start_time and end_time;
+    EXCEPTION WHEN NO_DATA_FOUND THEN
+        v_id_present := NULL;
+    END;
+    IF (v_id_present IS NULL) THEN
+        RETURN 'True';
+    ELSE
+        RETURN 'False';
+    END IF;
+ELSE
+ RETURN 'False';
+END IF;
+
+END;
+/
 
 CREATE OR REPLACE PROCEDURE recharge_card (p_wallet_id NUMBER, p_value_of_transaction NUMBER,recharge_type varchar)
 IS
