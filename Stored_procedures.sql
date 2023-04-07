@@ -268,6 +268,49 @@ END IF;
 END;
 /
 
+CREATE OR REPLACE FUNCTION can_transact
+(i_wallet_id number)
+RETURN varchar2
+IS
+v_present varchar2(20);
+BEGIN
+v_present := NULL;
+
+    BEGIN
+        select 'Pass' into v_present from 
+        wallet w join card c on w.wallet_id = c.wallet_id and w.wallet_id=i_wallet_id
+        join pass p on c.card_id = p.card_id and systimestamp AT TIME ZONE 'GMT' between valid_from and pass_expiry;
+        
+        RETURN v_present;
+    EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        v_present := NULL;
+    END;
+    BEGIN
+        select 'Ride' into v_present from
+        wallet w join ticket t on w.wallet_id =t.wallet_id  and w.wallet_id=i_wallet_id and t.rides>0 and w.wallet_expiry >= systimestamp AT TIME ZONE 'GMT';
+    
+        RETURN v_present;
+    EXCEPTION
+        WHEN NO_DATA_FOUND THEN
+        v_present := NULL;
+    END;
+    BEGIN
+        select 'Balance' into v_present from
+        wallet w join card c on w.wallet_id = c.wallet_id  and w.wallet_id=i_wallet_id and c.balance>0 and w.wallet_expiry >= systimestamp AT TIME ZONE 'GMT'; 
+    
+        RETURN v_present;
+    EXCEPTION
+        WHEN NO_DATA_FOUND THEN
+        v_present := NULL;
+    END;
+        
+    
+
+RETURN v_present;
+END;
+/
+
 CREATE OR REPLACE PROCEDURE recharge_card (p_wallet_id NUMBER, p_value_of_transaction NUMBER,recharge_type varchar)
 IS
 BEGIN
