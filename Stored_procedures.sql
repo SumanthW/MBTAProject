@@ -322,3 +322,38 @@ then
 end if
 END recharge_card;
 
+
+-- Gayatri Trigger ON INSERT to Wallet(New wallet creation should lead to creation of ticket or card) --
+-- Create the trigger
+CREATE OR REPLACE TRIGGER wallet_trigger
+AFTER INSERT ON wallet
+FOR EACH ROW
+BEGIN
+  IF :NEW.wallet_type = 'Card' THEN
+    INSERT INTO card (balance, wallet_id)
+    VALUES (0, :NEW.wallet_id);
+  ELSIF :NEW.wallet_type = 'Ticket' THEN
+    INSERT INTO ticket (wallet_id, rides, transit_id)
+    VALUES (:NEW.wallet_id, NULL, NULL);
+  END IF;
+END;
+
+-- Gayatri function --
+CREATE OR REPLACE FUNCTION check_pass_valid(
+ pass_id1 NUMBER
+)
+RETURN VARCHAR2
+IS 
+ valid_date date;
+BEGIN
+  -- CHECKING PASS VALID OR NOT
+  select to_date(pass_expiry,'DD-MM-YY') into valid_date from pass where pass_id = pass_id1;
+  if valid_date >= trunc(sysdate) then
+        return 'Valid';
+      else
+        return 'Invalid';
+  end if;
+  exception when others then return 'Invalid';
+
+END;
+
