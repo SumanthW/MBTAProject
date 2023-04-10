@@ -187,15 +187,41 @@ END;
 
 
 
+drop sequence card_id_sequence;
+drop SEQUENCE ticket_id_sequence;
+create sequence card_id_sequence start with 51 ;
+create sequence ticket_id_sequence start with 51 ;
 
-CREATE OR REPLACE PROCEDURE recharge_card (p_wallet_id NUMBER, p_value_of_transaction NUMBER,recharge_type varchar)
-IS
+set serveroutput on;
+
+
+create or replace PROCEDURE recharge_card (p_wallet_id NUMBER, p_value_of_transaction NUMBER,recharge_type varchar,rides NUMBER, transit_id number)
+as v_wallet_id number;
 BEGIN
+    begin
+        select wallet_id 
+        into v_wallet_id
+        from wallet
+        WHERE wallet_id = p_wallet_id;
+    exception
+        when no_data_found then
+              IF recharge_type = 'Top-up' THEN
+                INSERT INTO wallet (wallet_id, wallet_type, wallet_expiry, start_date, status)  VALUES (p_wallet_id, 'Card', '23-NOV-24', '06-OCT-21', 'Active');
+                insert into card (card_id,balance,wallet_id) values (card_id_sequence.nextval,p_value_of_transaction,p_wallet_id);
+            else
+                INSERT INTO wallet (wallet_id, wallet_type, wallet_expiry, start_date, status)  VALUES (p_wallet_id, 'Ticket', '23-NOV-24', '06-OCT-21', 'Active');
+                insert into ticket (ticket_id,wallet_id,rides,transit_id) values (ticket_id_sequence.nextval,p_wallet_id,rides,transit_id);
+            end if;
+        when others then
+        DBMS_OUTPUT.put_line(sqlerrm);
+    end;
 if recharge_type = 'Top-up'
 then
   UPDATE CARD
      SET Balance = Balance + p_value_of_transaction
    WHERE wallet_id = p_wallet_id;
-end if
+else 
+    DBMS_OUTPUT.put_line('not card');
+end if;
 END recharge_card;
-
+/
