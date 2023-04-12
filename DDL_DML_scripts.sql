@@ -1,7 +1,7 @@
 --CLEAN UP SCRIPT
 set serveroutput on
 declare
-    v_seq_exists varchar(1) := 'Y';
+    v_table_exists varchar(1) := 'Y';
     v_sql varchar(2000);
 begin
    dbms_output.put_line('Start schema cleanup');
@@ -24,7 +24,7 @@ begin
    loop
    dbms_output.put_line('....Dropping table '||i.table_name);
    begin
-       select 'Y' into v_seq_exists
+       select 'Y' into v_table_exists
        from USER_TABLES
        where TABLE_NAME=i.table_name;
 
@@ -47,7 +47,7 @@ end;
 --CLEAN UP SCRIPT
 set serveroutput on
 declare
-    v_table_exists varchar(1) := 'Y';
+    v_seq_exists varchar(1) := 'Y';
     v_sql varchar(2000);
 begin
    dbms_output.put_line('Start sequence cleanup');
@@ -61,7 +61,7 @@ begin
    loop
    dbms_output.put_line('....Dropping sequence '||i.seq_name);
    begin
-       select 'Y' into v_table_exists
+       select 'Y' into v_seq_exists
        from USER_SEQUENCES
        where SEQUENCE_NAME=i.seq_name;
 
