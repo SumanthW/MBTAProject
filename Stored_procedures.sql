@@ -311,17 +311,166 @@ RETURN v_present;
 END;
 /
 
-CREATE OR REPLACE PROCEDURE recharge_card (p_wallet_id NUMBER, p_value_of_transaction NUMBER,recharge_type varchar)
+CREATE OR REPLACE FUNCTION which_transit(i_station_id number)
+RETURN varchar2
 IS
+v_transit_type varchar2(20);
 BEGIN
-if recharge_type = 'Top-up'
-then
-  UPDATE CARD
-     SET Balance = Balance + p_value_of_transaction
-   WHERE wallet_id = p_wallet_id;
-end if
-END recharge_card;
+    select max(t.name) into v_transit_type from transit t join line l on t.transit_id = l.transit_id
+    join line_station_connections ls on ls.line_id = l.line_id
+    join station s on s.station_id = ls.station_id and s.station_id = i_station_id;
+    
+    RETURN v_transit_type;
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN    
+    RETURN NULL;
+END;
+/
 
+--wallet recharge procedure
+create or replace procedure RECHARGE_WALLET(
+pi_wallet_id NUMBER, 
+pi_value_of_transaction recharge.value_of_transaction%TYPE, 
+pi_recharge_type varchar2, 
+pi_recharge_device_id NUMBER,
+pi_transit_id NUMBER)
+AS
+ v_transaction_time date;
+ v_wallet_id NUMBER;
+ v_wallet_type varchar2(10);
+ v_wallet_status varchar2(10);
+ v_rides NUMBER;
+ v_type_price NUMBER;
+ v_recharge_device_status varchar2(10);
+ v_Number_of_days PASS_TYPE.no_of_days%TYPE;
+ v_PASS_TYPE PASS_TYPE.pass_type_id%TYPE;
+ v_CARD_ID NUMBER;
+BEGIN
+    select status into v_recharge_device_status from recharge_device where recharge_device_id = pi_recharge_device_id;
+    IF v_recharge_device_status = 'Active' THEN
+
+    begin
+        select wallet_id 
+        into v_wallet_id
+        from wallet
+        WHERE wallet_id = pi_wallet_id;
+
+        select wallet_type 
+        into v_wallet_type
+        from wallet
+        WHERE wallet_id = pi_wallet_id;
+
+        select status 
+        into v_wallet_status
+        from wallet
+        WHERE wallet_id = pi_wallet_id;
+
+        BEGIN
+            IF pi_recharge_type = 'Ride' THEN
+                DBMS_OUTPUT.put_line('Existing Ticket cannot be recharged/Cards cannot purchase rides, choose top-up option.');
+
+            elsif pi_recharge_type = 'Pass' and v_wallet_type = 'Card' and v_wallet_status = 'Active' THEN
+                
+                BEGIN
+                select price into v_type_price from pass_type where price = pi_value_of_transaction;
+                select MAX(pass_type_id) INTO v_PASS_TYPE from PASS_TYPE where price = pi_value_of_transaction;
+                select MAX(no_of_days) INTO v_Number_of_days from PASS_TYPE where price = pi_value_of_transaction;
+                select MAX(card_id) INTO v_CARD_ID from CARD where wallet_id = pi_wallet_id;
+
+                INSERT INTO RECHARGE(recharge_id,value_of_transaction,wallet_id,transaction_time,recharge_type,recharge_device_id) 
+                values (recharge_id_seq.nextval,pi_value_of_transaction,pi_wallet_id, systimestamp AT TIME ZONE 'GMT','Pass',pi_recharge_device_id);
+                INSERT INTO Pass(pass_id,card_id,pass_expiry,pass_type_id, recharge_id, valid_from) values (pass_id_seq.nextval,v_CARD_ID,SYSDATE+v_Number_of_days,v_PASS_TYPE,recharge_id_seq.currval,SYSDATE);
+                --Pass trigger to take care of pass addition
+                commit;
+                    DBMS_OUTPUT.put_line('Transaction Successful');
+                EXCEPTION when no_data_found then
+                    DBMS_OUTPUT.put_line('Transaction value should match the price of appropriate pass');
+
+                END;
+            elsif pi_recharge_type = 'Top-up' and v_wallet_type = 'Card' and v_wallet_status = 'Active' THEN
+                BEGIN 
+                    UPDATE card set Balance = Balance + pi_value_of_transaction where wallet_id = pi_wallet_id;
+                    INSERT INTO RECHARGE(recharge_id,value_of_transaction,wallet_id,transaction_time,recharge_type,recharge_device_id) 
+                    values (recharge_id_seq.nextval,pi_value_of_transaction,pi_wallet_id,systimestamp AT TIME ZONE 'GMT','Top-up',pi_recharge_device_id);
+                    commit;
+                    DBMS_OUTPUT.put_line('Transaction Successful');
+                EXCEPTION
+                when others then
+                    DBMS_OUTPUT.put_line('Oops! Transaction was not Successful');
+                END;
+            else
+                DBMS_OUTPUT.put_line('Invalid wallet for recharge type selected');
+
+            end if;
+        END;
+    exception
+        when no_data_found then
+            IF pi_recharge_type = 'Ride' THEN
+                BEGIN
+                    select price_per_ride into v_type_price from transit where transit_id = pi_transit_id;
+                    IF MOD(pi_value_of_transaction,v_type_price) = 0 THEN
+                        BEGIN 
+                            INSERT INTO wallet (wallet_id, wallet_type, wallet_expiry, start_date, status)  VALUES (wallet_id_seq.nextval, 'Ticket', SYSDATE, SYSDATE+90, 'Active');
+                            v_wallet_id := wallet_id_seq.currval;
+                            INSERT INTO TICKET(ticket_id,wallet_id,rides,transit_id) values (ticket_id_seq.nextval,wallet_id_seq.currval,pi_value_of_transaction/v_type_price,pi_transit_id);
+
+                            --UPDATE ticket set rides = pi_value_of_transaction/v_type_price where wallet_id = v_wallet_id;
+                            INSERT INTO RECHARGE(recharge_id,value_of_transaction,wallet_id,transaction_time,recharge_type,recharge_device_id) 
+                            values (recharge_id_seq.nextval,pi_value_of_transaction,wallet_id_seq.currval,systimestamp AT TIME ZONE 'GMT','Ride',pi_recharge_device_id);
+                            commit;
+                            DBMS_OUTPUT.put_line('Transaction Successful');
+                        END;
+                    ELSE
+                        DBMS_OUTPUT.put_line('Transaction value should be multiple of ride price for the transit selected');
+                    end if;
+                EXCEPTION when no_data_found then
+                    DBMS_OUTPUT.put_line('Invalid transit selected');
+                END;
+            elsif pi_recharge_type = 'Pass' THEN
+
+                BEGIN
+                    select price into v_type_price from pass_type where price = pi_value_of_transaction;
+                    INSERT INTO wallet (wallet_id, wallet_type, wallet_expiry, start_date, status)  VALUES (wallet_id_seq.nextval, 'Card', SYSDATE, SYSDATE+365, 'Active');
+                    INSERT INTO CARD (card_id, balance,wallet_id) values (card_id_seq.nextval,0,wallet_id_seq.currval);
+                    select MAX(pass_type_id) INTO v_PASS_TYPE from PASS_TYPE where price = pi_value_of_transaction;
+                    select MAX(no_of_days) INTO v_Number_of_days from PASS_TYPE where price = pi_value_of_transaction;
+
+                    INSERT INTO RECHARGE(recharge_id,value_of_transaction,wallet_id,transaction_time,recharge_type,recharge_device_id) 
+                    values (recharge_id_seq.nextval,pi_value_of_transaction,wallet_id_seq.currval,systimestamp AT TIME ZONE 'GMT','Pass',pi_recharge_device_id);
+                    INSERT INTO Pass(pass_id,card_id,pass_expiry,pass_type_id, recharge_id, valid_from) values (pass_id_seq.nextval,card_id_seq.currval,SYSDATE+v_Number_of_days,v_PASS_TYPE,recharge_id_seq.currval,SYSDATE);
+                    commit;
+                    DBMS_OUTPUT.put_line('Transaction Successful');
+                    --Pass trigger to take care of pass addition
+
+                EXCEPTION when no_data_found then
+                    DBMS_OUTPUT.put_line('Transaction value should match the price of appropriate pass');
+
+                END;
+            elsif pi_recharge_type = 'Top-up' THEN
+                BEGIN 
+                    INSERT INTO wallet (wallet_id, wallet_type, wallet_expiry, start_date, status)  VALUES (wallet_id_seq.nextval, 'Card', SYSDATE, SYSDATE+365, 'Active');
+                    v_wallet_id := wallet_id_seq.currval;
+                    INSERT INTO CARD (card_id, balance,wallet_id) values (card_id_seq.nextval,pi_value_of_transaction,wallet_id_seq.currval);
+                    --UPDATE card set Balance = Balance + pi_value_of_transaction where wallet_id = v_wallet_id;
+                    DBMS_OUTPUT.put_line('Trying to add recharge');
+                    INSERT INTO RECHARGE(recharge_id,value_of_transaction,wallet_id,transaction_time,recharge_type,recharge_device_id) 
+                    values (recharge_id_seq.nextval,pi_value_of_transaction,wallet_id_seq.currval,systimestamp AT TIME ZONE 'GMT','Top-up',pi_recharge_device_id);
+                    commit;
+                    DBMS_OUTPUT.put_line('Transaction Successful');
+                END;
+            end if;
+        when others then
+            DBMS_OUTPUT.put_line(sqlerrm);
+    end;
+    ELSE
+        DBMS_OUTPUT.put_line('Recharge device is down');
+    END IF;
+    EXCEPTION
+
+    WHEN NO_DATA_FOUND THEN
+        DBMS_OUTPUT.put_line('Invalid recharge');
+END RECHARGE_WALLET;
+/
 
 --Updating status of the expired wallet
 CREATE OR REPLACE PROCEDURE update_wallet_status
@@ -333,4 +482,125 @@ BEGIN
   WHERE wallet_expiry < SYSDATE; 
 END;
 /
+-- Stored procedure for Transaction --
+CREATE OR REPLACE PROCEDURE process_transaction (
+  p_wallet_id        IN wallet.wallet_id%TYPE,
+  p_transaction_device_id IN transaction_device.transaction_device_id%TYPE
+)
+IS
+  v_wallet_status           wallet.status%TYPE;
+  v_transaction_device_status transaction_device.status%TYPE;
+  v_station_id              transaction_device.station_id%TYPE;
+  v_line_id                 transaction_device.line_id%TYPE;
+  v_transit_id              line.transit_id%TYPE;
+  v_transit_price_per_ride  transit.price_per_ride%TYPE;
+  v_wallet_type             wallet.wallet_type%TYPE;
+  v_card_balance            card.balance%TYPE;
+  v_ticket_rides            ticket.rides%TYPE;
+  v_pass_id                 NUMBER;
+BEGIN
+  -- Check if wallet is active
+  
+  BEGIN
+    SELECT status INTO v_wallet_status FROM wallet WHERE wallet_id = p_wallet_id and status = 'Active';
+  
+    -- Check if transaction device is active and get station and line ids
+    SELECT status, station_id, line_id INTO v_transaction_device_status, v_station_id, v_line_id
+    FROM transaction_device WHERE transaction_device_id = p_transaction_device_id and status = 'Active';
+    
+    --Checking if transit is active
+    select t.transit_id into v_transit_id from transaction_device td join line l on td.line_id = l.line_id and td.transaction_device_id = p_transaction_device_id
+    join transit t on l.transit_id = t.transit_id and t.Status = 'Active';
+    BEGIN
+        -- Get transit price per ride
+        SELECT price_per_ride INTO v_transit_price_per_ride FROM transit WHERE transit_id = v_transit_id;
+        
+        -- Check if wallet is card or ticket
+        SELECT wallet_type INTO v_wallet_type FROM wallet WHERE wallet_id = p_wallet_id;
+        
+        IF v_wallet_type = 'Card' THEN
+            -- Check if card has pass
+            BEGIN
+                SELECT MAX(pass_id) into v_pass_id from PASS P join CARD C on C.card_id=P.card_id 
+                join WALLET W on W.wallet_id = C.wallet_id and W.wallet_id = p_wallet_id
+                where P.pass_expiry >= SYSDATE;
+                INSERT INTO transaction(transaction_id,transaction_type, swipe_time, wallet_id, value, transaction_device_id)
+                VALUES(transaction_id_seq.nextval,'Pass', SYSTIMESTAMP AT TIME ZONE 'GMT', p_wallet_id, 0, p_transaction_device_id);
+                COMMIT;
+                DBMS_OUTPUT.put_line('Transaction successful. Enjoy your ride!');
+            EXCEPTION
+            WHEN NO_DATA_FOUND THEN
+                --PASS IS NOT AVAILABLE so check balance
+                BEGIN
+                select C.Balance into v_card_balance from WALLET W join CARD C 
+                on W.wallet_id = C.wallet_id and W.wallet_id = p_wallet_id and C.Balance >= v_transit_price_per_ride;
+                UPDATE CARD set BALANCE = BALANCE - v_transit_price_per_ride where wallet_id = p_wallet_id;
+                INSERT INTO transaction(transaction_id,transaction_type, swipe_time, wallet_id, value, transaction_device_id)
+                VALUES(transaction_id_seq.nextval,'Balance', SYSTIMESTAMP AT TIME ZONE 'GMT', p_wallet_id, v_transit_price_per_ride, p_transaction_device_id);
+                COMMIT;
+                DBMS_OUTPUT.put_line('Transaction successful. Enjoy your ride!');
+                EXCEPTION
+                    WHEN NO_DATA_FOUND THEN
+                        DBMS_OUTPUT.put_line('Insufficient balance on the card!');
+                END;
+                
+            END;
+        ELSE 
+            --Ticket block
+            BEGIN 
+                SELECT T.rides into v_ticket_rides from TICKET T where T.wallet_id = p_wallet_id and T.rides >= 1 and T.transit_id = v_transit_id;
+                UPDATE TICKET set rides = rides -1 where wallet_id = p_wallet_id;
+                INSERT INTO transaction(transaction_id,transaction_type, swipe_time, wallet_id, value, transaction_device_id)
+                VALUES(transaction_id_seq.nextval,'Ride', SYSTIMESTAMP AT TIME ZONE 'GMT', p_wallet_id, v_transit_price_per_ride, p_transaction_device_id);
+                COMMIT;
+                DBMS_OUTPUT.put_line('Transaction successful. Enjoy your ride!');
+            EXCEPTION
+                WHEN NO_DATA_FOUND THEN
+                        DBMS_OUTPUT.put_line('The ticket has no rides left!');
+            END;
+        END IF;
+    END;
+  EXCEPTION 
+    WHEN NO_DATA_FOUND
+        THEN 
+    DBMS_OUTPUT.put_line('Transaction declined due to facility being down or wallet is invalid.');
+    
+ 
+  END;
+END process_transaction;
+  /
+
+-- Gayatri Trigger ON INSERT to Wallet(New wallet creation should lead to creation of ticket or card) --
+-- Create the trigger
+CREATE OR REPLACE TRIGGER wallet_trigger
+AFTER INSERT ON wallet
+FOR EACH ROW
+BEGIN
+  IF :NEW.wallet_type = 'Card' THEN
+    INSERT INTO card (balance, wallet_id)
+    VALUES (0, :NEW.wallet_id);
+  ELSIF :NEW.wallet_type = 'Ticket' THEN
+    INSERT INTO ticket (wallet_id, rides, transit_id)
+    VALUES (:NEW.wallet_id, NULL, NULL);
+  END IF;
+END;
+
+-- Gayatri function --
+CREATE OR REPLACE FUNCTION check_pass_valid(
+ pass_id1 NUMBER
+)
+RETURN VARCHAR2
+IS 
+ valid_date date;
+BEGIN
+  -- CHECKING PASS VALID OR NOT
+  select to_date(pass_expiry,'DD-MM-YY') into valid_date from pass where pass_id = pass_id1;
+  if valid_date >= trunc(sysdate) then
+        return 'Valid';
+      else
+        return 'Invalid';
+  end if;
+  exception when others then return 'Invalid';
+
+END;
 
