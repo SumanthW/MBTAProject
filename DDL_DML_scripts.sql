@@ -96,8 +96,8 @@ select 17,3,'Lowell Line', to_date('29-01-2000','dd-mm-yyyy') from dual union al
 select 18,3,'Fitchburg Line', to_date('29-01-2000','dd-mm-yyyy') from dual union all
 select 19,3,'Greenbush Line', to_date('29-01-2000','dd-mm-yyyy') from dual union all
 select 20,4,'Salem', to_date('29-01-2000','dd-mm-yyyy') from dual union all
-select 20,4,'Charlestown', to_date('29-01-2000','dd-mm-yyyy') from dual union all
-select 20,4,'Winthrop', to_date('29-01-2000','dd-mm-yyyy') from dual;
+select 21,4,'Charlestown', to_date('29-01-2000','dd-mm-yyyy') from dual union all
+select 22,4,'Winthrop', to_date('29-01-2000','dd-mm-yyyy') from dual;
 
 
 --Stations DML
