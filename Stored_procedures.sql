@@ -482,4 +482,125 @@ BEGIN
   WHERE wallet_expiry < SYSDATE; 
 END;
 /
+-- Stored procedure for Transaction --
+CREATE OR REPLACE PROCEDURE process_transaction (
+  p_wallet_id        IN wallet.wallet_id%TYPE,
+  p_transaction_device_id IN transaction_device.transaction_device_id%TYPE
+)
+IS
+  v_wallet_status           wallet.status%TYPE;
+  v_transaction_device_status transaction_device.status%TYPE;
+  v_station_id              transaction_device.station_id%TYPE;
+  v_line_id                 transaction_device.line_id%TYPE;
+  v_transit_id              line.transit_id%TYPE;
+  v_transit_price_per_ride  transit.price_per_ride%TYPE;
+  v_wallet_type             wallet.wallet_type%TYPE;
+  v_card_balance            card.balance%TYPE;
+  v_ticket_rides            ticket.rides%TYPE;
+  v_pass_id                 NUMBER;
+BEGIN
+  -- Check if wallet is active
+  
+  BEGIN
+    SELECT status INTO v_wallet_status FROM wallet WHERE wallet_id = p_wallet_id and status = 'Active';
+  
+    -- Check if transaction device is active and get station and line ids
+    SELECT status, station_id, line_id INTO v_transaction_device_status, v_station_id, v_line_id
+    FROM transaction_device WHERE transaction_device_id = p_transaction_device_id and status = 'Active';
+    
+    --Checking if transit is active
+    select t.transit_id into v_transit_id from transaction_device td join line l on td.line_id = l.line_id and td.transaction_device_id = p_transaction_device_id
+    join transit t on l.transit_id = t.transit_id and t.Status = 'Active';
+    BEGIN
+        -- Get transit price per ride
+        SELECT price_per_ride INTO v_transit_price_per_ride FROM transit WHERE transit_id = v_transit_id;
+        
+        -- Check if wallet is card or ticket
+        SELECT wallet_type INTO v_wallet_type FROM wallet WHERE wallet_id = p_wallet_id;
+        
+        IF v_wallet_type = 'Card' THEN
+            -- Check if card has pass
+            BEGIN
+                SELECT MAX(pass_id) into v_pass_id from PASS P join CARD C on C.card_id=P.card_id 
+                join WALLET W on W.wallet_id = C.wallet_id and W.wallet_id = p_wallet_id
+                where P.pass_expiry >= SYSDATE;
+                INSERT INTO transaction(transaction_id,transaction_type, swipe_time, wallet_id, value, transaction_device_id)
+                VALUES(transaction_id_seq.nextval,'Pass', SYSTIMESTAMP AT TIME ZONE 'GMT', p_wallet_id, 0, p_transaction_device_id);
+                COMMIT;
+                DBMS_OUTPUT.put_line('Transaction successful. Enjoy your ride!');
+            EXCEPTION
+            WHEN NO_DATA_FOUND THEN
+                --PASS IS NOT AVAILABLE so check balance
+                BEGIN
+                select C.Balance into v_card_balance from WALLET W join CARD C 
+                on W.wallet_id = C.wallet_id and W.wallet_id = p_wallet_id and C.Balance >= v_transit_price_per_ride;
+                UPDATE CARD set BALANCE = BALANCE - v_transit_price_per_ride where wallet_id = p_wallet_id;
+                INSERT INTO transaction(transaction_id,transaction_type, swipe_time, wallet_id, value, transaction_device_id)
+                VALUES(transaction_id_seq.nextval,'Balance', SYSTIMESTAMP AT TIME ZONE 'GMT', p_wallet_id, v_transit_price_per_ride, p_transaction_device_id);
+                COMMIT;
+                DBMS_OUTPUT.put_line('Transaction successful. Enjoy your ride!');
+                EXCEPTION
+                    WHEN NO_DATA_FOUND THEN
+                        DBMS_OUTPUT.put_line('Insufficient balance on the card!');
+                END;
+                
+            END;
+        ELSE 
+            --Ticket block
+            BEGIN 
+                SELECT T.rides into v_ticket_rides from TICKET T where T.wallet_id = p_wallet_id and T.rides >= 1 and T.transit_id = v_transit_id;
+                UPDATE TICKET set rides = rides -1 where wallet_id = p_wallet_id;
+                INSERT INTO transaction(transaction_id,transaction_type, swipe_time, wallet_id, value, transaction_device_id)
+                VALUES(transaction_id_seq.nextval,'Ride', SYSTIMESTAMP AT TIME ZONE 'GMT', p_wallet_id, v_transit_price_per_ride, p_transaction_device_id);
+                COMMIT;
+                DBMS_OUTPUT.put_line('Transaction successful. Enjoy your ride!');
+            EXCEPTION
+                WHEN NO_DATA_FOUND THEN
+                        DBMS_OUTPUT.put_line('The ticket has no rides left!');
+            END;
+        END IF;
+    END;
+  EXCEPTION 
+    WHEN NO_DATA_FOUND
+        THEN 
+    DBMS_OUTPUT.put_line('Transaction declined due to facility being down or wallet is invalid.');
+    
+ 
+  END;
+END process_transaction;
+  /
+
+-- Gayatri Trigger ON INSERT to Wallet(New wallet creation should lead to creation of ticket or card) --
+-- Create the trigger
+CREATE OR REPLACE TRIGGER wallet_trigger
+AFTER INSERT ON wallet
+FOR EACH ROW
+BEGIN
+  IF :NEW.wallet_type = 'Card' THEN
+    INSERT INTO card (balance, wallet_id)
+    VALUES (0, :NEW.wallet_id);
+  ELSIF :NEW.wallet_type = 'Ticket' THEN
+    INSERT INTO ticket (wallet_id, rides, transit_id)
+    VALUES (:NEW.wallet_id, NULL, NULL);
+  END IF;
+END;
+
+-- Gayatri function --
+CREATE OR REPLACE FUNCTION check_pass_valid(
+ pass_id1 NUMBER
+)
+RETURN VARCHAR2
+IS 
+ valid_date date;
+BEGIN
+  -- CHECKING PASS VALID OR NOT
+  select to_date(pass_expiry,'DD-MM-YY') into valid_date from pass where pass_id = pass_id1;
+  if valid_date >= trunc(sysdate) then
+        return 'Valid';
+      else
+        return 'Invalid';
+  end if;
+  exception when others then return 'Invalid';
+
+END;
 
