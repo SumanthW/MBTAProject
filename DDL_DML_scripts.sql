@@ -1,7 +1,7 @@
 --CLEAN UP SCRIPT
 set serveroutput on
 declare
-    v_table_exists varchar(1) := 'Y';
+    v_seq_exists varchar(1) := 'Y';
     v_sql varchar(2000);
 begin
    dbms_output.put_line('Start schema cleanup');
@@ -24,7 +24,7 @@ begin
    loop
    dbms_output.put_line('....Dropping table '||i.table_name);
    begin
-       select 'Y' into v_table_exists
+       select 'Y' into v_seq_exists
        from USER_TABLES
        where TABLE_NAME=i.table_name;
 
@@ -42,6 +42,52 @@ exception
    when others then
       dbms_output.put_line('Failed to execute code:'||sqlerrm);
 end;
+/
+
+--CLEAN UP SCRIPT
+set serveroutput on
+declare
+    v_table_exists varchar(1) := 'Y';
+    v_sql varchar(2000);
+begin
+   dbms_output.put_line('Start sequence cleanup');
+   for i in (select 'CARD_ID_SEQ' seq_name from dual union all
+            select 'PASS_ID_SEQ' seq_name from dual union all
+            select 'RECHARGE_ID_SEQ' seq_name from dual union all
+            select 'TICKET_ID_SEQ' seq_name from dual union all
+            select 'WALLET_ID_SEQ' seq_name from dual union all
+            select 'TRANSACTION_ID_SEQ' seq_name from dual
+   )
+   loop
+   dbms_output.put_line('....Dropping sequence '||i.seq_name);
+   begin
+       select 'Y' into v_table_exists
+       from USER_SEQUENCES
+       where SEQUENCE_NAME=i.seq_name;
+
+       v_sql := 'drop sequence '||i.seq_name;
+       execute immediate v_sql;
+       dbms_output.put_line('........seqence '||i.seq_name||' dropped successfully');
+       
+   exception
+       when no_data_found then
+           dbms_output.put_line('........Sequence already dropped');
+   end;
+   end loop;
+   dbms_output.put_line('Schema cleanup successfully completed');
+exception
+   when others then
+      dbms_output.put_line('Failed to execute code:'||sqlerrm);
+end;
+/
+
+create sequence CARD_ID_SEQ start with 1000;
+create sequence PASS_ID_SEQ start with 1000;
+create sequence RECHARGE_ID_SEQ start with 1000;
+create sequence TICKET_ID_SEQ start with 1000;
+create sequence WALLET_ID_SEQ start with 1000;
+create sequence TRANSACTION_ID_SEQ start with 1000;
+
 /
 
 -- TABLE CREATION
