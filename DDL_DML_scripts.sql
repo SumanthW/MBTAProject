@@ -83,7 +83,21 @@ select 4,1,'Silver Line', to_date('29-01-2000','dd-mm-yyyy') from dual union all
 select 5,1,'Green-B Line', to_date('29-01-2000','dd-mm-yyyy') from dual union all
 select 6,1,'Green-C Line', to_date('29-01-2000','dd-mm-yyyy') from dual union all
 select 7,1,'Green-D Line', to_date('29-01-2000','dd-mm-yyyy') from dual union all
-select 8,1,'Green-E Line', to_date('29-01-2000','dd-mm-yyyy') from dual;
+select 8,1,'Green-E Line', to_date('29-01-2000','dd-mm-yyyy') from dual union all
+select 9,2,'route 8', to_date('29-01-2000','dd-mm-yyyy') from dual union all
+select 10,2,'route 57', to_date('29-01-2000','dd-mm-yyyy') from dual union all
+select 11,2,'route 47', to_date('29-01-2000','dd-mm-yyyy') from dual union all
+select 12,2,'route 64', to_date('29-01-2000','dd-mm-yyyy') from dual union all
+select 13,2,'route 23', to_date('29-01-2000','dd-mm-yyyy') from dual union all
+select 14,2,'route 19', to_date('29-01-2000','dd-mm-yyyy') from dual union all
+select 15,3,'Fairmount Line', to_date('29-01-2000','dd-mm-yyyy') from dual union all
+select 16,3,'Kingston Line', to_date('29-01-2000','dd-mm-yyyy') from dual union all
+select 17,3,'Lowell Line', to_date('29-01-2000','dd-mm-yyyy') from dual union all
+select 18,3,'Fitchburg Line', to_date('29-01-2000','dd-mm-yyyy') from dual union all
+select 19,3,'Greenbush Line', to_date('29-01-2000','dd-mm-yyyy') from dual union all
+select 20,4,'Salem', to_date('29-01-2000','dd-mm-yyyy') from dual union all
+select 20,4,'Charlestown', to_date('29-01-2000','dd-mm-yyyy') from dual union all
+select 20,4,'Winthrop', to_date('29-01-2000','dd-mm-yyyy') from dual;
 
 
 --Stations DML
