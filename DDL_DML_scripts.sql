@@ -202,7 +202,58 @@ select 96,'Riverway', to_date('29-01-2000','dd-mm-yyyy') from dual union all
 select 97,'Mission Park', to_date('29-01-2000','dd-mm-yyyy') from dual union all
 select 98,'Fenwood Road', to_date('29-01-2000','dd-mm-yyyy') from dual union all
 select 99,'Brigham Circle', to_date('29-01-2000','dd-mm-yyyy') from dual union all
-select 100,'Longwood Medical Area', to_date('29-01-2000','dd-mm-yyyy') from dual;
+select 100,'South Point Dorchester', to_date('29-01-2000','dd-mm-yyyy') from dual union all
+select 101,'Gieger Gibson Health centre', to_date('29-01-2000','dd-mm-yyyy') from dual union all
+select 102,'Bayside Expo', to_date('29-01-2000','dd-mm-yyyy')  from dual union all
+select 103,'JFK/UMass', to_date('29-01-2000','dd-mm-yyyy') from union dual all
+select 104,'Buttonwood street', to_date('29-01-2000','dd-mm-yyyy') from dual union all
+select 105,'Clapp street', to_date('29-01-2000','dd-mm-yyyy') from dual union all
+select 106,'Theo Glynn Way', to_date('29-01-2000','dd-mm-yyyy') from dual union all
+select 107,'Newmarket Square', to_date('29-01-2000','dd-mm-yyyy') from dual union all
+select 108,'E Newton Street', to_date('29-01-2000','dd-mm-yyyy') from dual union all
+select 109,'Worchester Square', to_date('29-01-2000','dd-mm-yyyy') from dual union all
+select 110,'William Street', to_date('29-01-2000','dd-mm-yyyy') from dual union all
+select 111,'Kenmore', to_date('29-01-2000','dd-mm-yyyy') from dual union all
+select 112,'Silber Way', to_date('29-01-2000','dd-mm-yyyy') from dual union all
+select 113,'St Mary street', to_date('29-01-2000','dd-mm-yyyy') from dual union all
+select 114,'Commonwealth avenue', to_date('29-01-2000','dd-mm-yyyy') from dual union all
+select 115,'Babcock street', to_date('29-01-2000','dd-mm-yyyy') from dual union all
+select 116,'Wasinton Street', to_date('29-01-2000','dd-mm-yyyy') from dual union all
+select 117,'Broadway station', to_date('29-01-2000','dd-mm-yyyy') from dual union all
+select 118,'Albany Street', to_date('29-01-2000','dd-mm-yyyy') from dual union all
+select 119,'E Dedham Street', to_date('29-01-2000','dd-mm-yyyy') from dual union all
+select 120,'Worchester square', to_date('29-01-2000','dd-mm-yyyy') from dual union all
+select 121,'Longwood avenue', to_date('29-01-2000','dd-mm-yyyy') from dual union all
+select 122,'Brookline avenue ', to_date('29-01-2000','dd-mm-yyyy') from dual union all
+select 123,'Fullerton street', to_date('29-01-2000','dd-mm-yyyy') from dual union all
+select 124,'Park Drive', to_date('29-01-2000','dd-mm-yyyy') from dual union all
+select 125,'Harvard Street', to_date('29-01-2000','dd-mm-yyyy') from dual union all
+select 126,'Beacon Street', to_date('29-01-2000','dd-mm-yyyy') from dual union all
+select 127,'Fields Corner', to_date('29-01-2000','dd-mm-yyyy') from dual union all
+select 128,'Geneva Ave', to_date('29-01-2000','dd-mm-yyyy') from dual union all
+select 129,'Westville Street', to_date('29-01-2000','dd-mm-yyyy') from dual union all
+select 130,'Holidat Street', to_date('29-01-2000','dd-mm-yyyy') from dual union all
+select 131,'Bowdoin Street', to_date('29-01-2000','dd-mm-yyyy') from dual union all
+select 132,'Olney Street', to_date('29-01-2000','dd-mm-yyyy') from dual union all
+select 133,'Warren street', to_date('29-01-2000','dd-mm-yyyy') from dual union all
+select 134,'King Street', to_date('29-01-2000','dd-mm-yyyy') from dual union all
+select 135,'Madison Park', to_date('29-01-2000','dd-mm-yyyy') from dual union all
+select 136,'Shawmut Ave', to_date('29-01-2000','dd-mm-yyyy') from dual union all
+select 137,'Nubian', to_date('29-01-2000','dd-mm-yyyy') from dual union all
+select 138,'Dabney PL', to_date('29-01-2000','dd-mm-yyyy') from dual union all
+select 139,'Walnut Ave', to_date('29-01-2000','dd-mm-yyyy') from dual union all
+select 140,'Ayer', to_date('29-01-2000','dd-mm-yyyy') from dual union all
+select 141,'Shirley', to_date('29-01-2000','dd-mm-yyyy') from dual union all
+select 142,'Porter', to_date('29-01-2000','dd-mm-yyyy') from dual union all
+select 143,'Kendal Green', to_date('29-01-2000','dd-mm-yyyy') from dual union all
+select 144,'Belmont', to_date('29-01-2000','dd-mm-yyyy') from dual union all
+select 145,'Lincoln', to_date('29-01-2000','dd-mm-yyyy') from dual union all
+select 146,'South Station', to_date('29-01-2000','dd-mm-yyyy') from dual union all
+select 147,'Cohasset', to_date('29-01-2000','dd-mm-yyyy') from dual union all
+select 148,'Quincy Centre', to_date('29-01-2000','dd-mm-yyyy') from dual union all
+select 149,'West Hingham', to_date('29-01-2000','dd-mm-yyyy') from dual union all
+select 150,'JFK/UMass', to_date('29-01-2000','dd-mm-yyyy') from dual;
+
 
 
 --LINE STATION CONNECTIONS DML
