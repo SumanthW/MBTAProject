@@ -1321,7 +1321,56 @@ select 606,96,8,'Active' from dual union all
 select 607,97,8,'Active' from dual union all
 select 608,98,8,'Active' from dual union all
 select 609,99,8,'Active' from dual union all
-select 610,100,8,'Active' from dual;
+select 610,100,9,'Active' from dual union all
+select 611,101,9,'Active' from dual union all
+select 612,103,9,'Active' from dual union all
+select 613,104,9,'Active' from dual union all
+select 614,105,9,'Active' from dual union all
+select 615,107,9,'Active' from dual union all
+select 616,108,9,'Active' from dual union all
+select 617,109,10,'Active' from dual union all
+select 618,110,10,'Active' from dual union all
+select 619,112,10,'Active' from dual union all
+select 620,115,10,'Active' from dual union all
+select 621,117,10,'Active' from dual union all
+select 622,116,10,'Active' from dual union all
+select 623,118,10,'Active' from dual union all
+select 624,119,11,'Active' from dual union all
+select 625,120,11,'Active' from dual union all
+select 626,122,11,'Active' from dual union all
+select 627,123,11,'Active' from dual union all
+select 628,121,11,'Active' from dual union all
+select 629,124,12,'Active' from dual union all
+select 630,130,12,'Active' from dual union all
+select 631,131,13,'Active' from dual union all
+select 632,132,13,'Active' from dual union all
+select 633,133,13,'Active' from dual union all
+select 634,134,13,'Active' from dual union all
+select 635,135,13,'Active' from dual union all
+select 636,125,13,'Active' from dual union all
+select 637,126,14,'Active' from dual union all
+select 638,127,14,'Active' from dual union all
+select 639,128,14,'Active' from dual union all
+select 640,129,14,'Active' from dual union all
+select 641,136,14,'Active' from dual union all
+select 642,137,14,'Active' from dual union all
+select 643,139,14,'Active' from dual union all
+select 644,138,14,'Active' from dual union all
+select 645,140,15,'Active' from dual union all
+select 646,141,15,'Active' from dual union all
+select 647,142,15,'Active' from dual union all
+select 648,143,15,'Active' from dual union all
+select 649,144,16,'Active' from dual union all
+select 650,145,16,'Active' from dual union all
+select 651,146,16,'Active' from dual union all
+select 652,147,16,'Active' from dual union all
+select 653,148,16,'Active' from dual union all
+select 654,149,17,'Active' from dual union all
+select 655,150,17,'Active' from dual union all
+select 656,111,10,'Active' from dual union all
+select 657,113,10,'Active' from dual union all
+select 658,114,10,'Active' from dual union all
+select 659,102,10,'Active' from dual;
 
 --WALLET DML
 truncate table WALLET;
