@@ -338,3 +338,15 @@ then
 end if
 END recharge_card;
 
+
+--Updating status of the expired wallet
+CREATE OR REPLACE PROCEDURE update_wallet_status
+IS
+BEGIN
+  -- Update wallet status to inactive for expired wallets
+  UPDATE wallet
+  SET status = 'inactive'
+  WHERE wallet_expiry < SYSDATE; 
+END;
+/
+
