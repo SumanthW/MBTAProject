@@ -679,7 +679,35 @@ select 290,2,'Active' from dual union all
 select 291,96,'Active' from dual union all
 select 292,68,'Active' from dual union all
 select 293,55,'Active' from dual union all
-select 294,77,'Inactive' from dual;
+select 294,127,'Active' from dual union all
+select 295,120,'Inactive' from dual union all
+select 296,112,'Active' from dual union all
+select 297,130,'Active' from dual union all
+select 298,110,'Active' from dual union all
+select 299,133,'Active' from dual union all
+select 300,144,'Inactive' from dual union all
+select 301,139,'Active' from dual union all
+select 302,149,'Active' from dual union all
+select 303,122,'Active' from dual union all
+select 304,138,'Active' from dual union all
+select 305,145,'Active' from dual union all
+select 306,119,'Active' from dual union all
+select 307,129,'Inactive' from dual union all
+select 308,113,'Active' from dual union all
+select 309,131,'Active' from dual union all
+select 310,135,'Active' from dual union all
+select 311,148,'Active' from dual union all
+select 312,118,'Active' from dual union all
+select 313,123,'Active' from dual union all
+select 314,125,'Active' from dual union all
+select 315,116,'Inactive' from dual union all
+select 316,137,'Active' from dual union all
+select 317,146,'Active' from dual union all
+select 318,141,'Active' from dual union all
+select 319,111,'Active' from dual union all
+select 320,132,'Active' from dual union all
+select 321,128,'Active' from dual union all
+select 322,150,'Inactive' from dual;
 
 --TRANSACTION DEVICE DML
 truncate table TRANSACTION_DEVICE;
