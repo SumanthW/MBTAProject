@@ -38,11 +38,11 @@ begin
         LOOP
             --SKELETON -> process_transaction(p_wallet_id,p_transaction_device_id);
             process_transaction(round(dbms_random.value(1,100)),round(dbms_random.value(1,2000)));
-            process_transaction(round(dbms_random.value(1,1000)),round(dbms_random.value(1,2000)));
-            process_transaction(round(dbms_random.value(400,1000)),round(dbms_random.value(1,2000)));
-            process_transaction(round(dbms_random.value(200,800)),round(dbms_random.value(1,2000)));
+            process_transaction(round(dbms_random.value(1,1000)),round(dbms_random.value(1,890)));
+            process_transaction(round(dbms_random.value(400,1000)),round(dbms_random.value(1,890)));
+            process_transaction(round(dbms_random.value(200,800)),round(dbms_random.value(1,890)));
             process_transaction(round(dbms_random.value(1000,2000)),round(dbms_random.value(1,2000)));
-            process_transaction(round(dbms_random.value(1000,1100)),round(dbms_random.value(1,2000)));
+            process_transaction(round(dbms_random.value(1000,1100)),round(dbms_random.value(1,890)));
             process_transaction(round(dbms_random.value(100,2000)),round(dbms_random.value(1,2000)));
             v_counter := v_counter +1;
         END LOOP;
