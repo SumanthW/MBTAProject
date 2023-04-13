@@ -346,7 +346,7 @@ AS
  v_PASS_TYPE PASS_TYPE.pass_type_id%TYPE;
  v_CARD_ID NUMBER;
 BEGIN
-    select status into v_recharge_device_status from recharge_device where recharge_device_id = pi_recharge_device_id;
+    select status into v_recharge_device_status from recharge_device where recharge_device_id = pi_recharge_device_id  and pi_value_of_transaction >0;
     IF v_recharge_device_status = 'Active' THEN
 
     begin
