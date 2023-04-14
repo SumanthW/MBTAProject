@@ -54,7 +54,7 @@ BEGIN
             DBMS_SCHEDULER.CREATE_JOB (
             job_name           => 'STATUS_INACTIVE_STATION_LINE_'||v_station_id||'_'||v_line_id||'_OP_ID_'||v_OPERATION_ID,
             job_type           => 'PLSQL_BLOCK',
-            job_action         => 'BEGIN UPDATE TRANSACTION_DEVICE SET status = ''Inactive'' where station_id = '||v_station_id||' and line_id = '||v_line_id||'; END;',
+            job_action         => 'BEGIN UPDATE TRANSACTION_DEVICE SET status = ''Inactive'' where station_id = '||v_station_id||' and line_id = '||v_line_id||'; commit;  END;',
             start_date         => v_start_time,
             enabled            => TRUE,
             auto_drop          => TRUE,
@@ -63,7 +63,7 @@ BEGIN
             DBMS_SCHEDULER.CREATE_JOB (
             job_name           => 'STATUS_ACTIVE_STATION_LINE_'||v_station_id||'_'||v_line_id||'_OP_ID_'||v_OPERATION_ID,
             job_type           => 'PLSQL_BLOCK',
-            job_action         => 'BEGIN UPDATE TRANSACTION_DEVICE SET status = ''Active'' where station_id = '||v_station_id||' and line_id = '||v_line_id||'; END;',
+            job_action         => 'BEGIN UPDATE TRANSACTION_DEVICE SET status = ''Active'' where station_id = '||v_station_id||' and line_id = '||v_line_id||'; commit;  END;',
             start_date         => v_end_time,
             enabled            => TRUE,
             auto_drop          => TRUE,
@@ -77,7 +77,7 @@ BEGIN
             DBMS_SCHEDULER.CREATE_JOB (
             job_name           => 'STATUS_INACTIVE_STATION_'||v_station_id||'_OP_ID_'||v_OPERATION_ID,
             job_type           => 'PLSQL_BLOCK',
-            job_action         => 'BEGIN UPDATE TRANSACTION_DEVICE SET status = ''Inactive'' where station_id = '||v_station_id||'; END;',
+            job_action         => 'BEGIN UPDATE TRANSACTION_DEVICE SET status = ''Inactive'' where station_id = '||v_station_id||'; commit;  END;',
             start_date         => v_start_time,
             enabled            => TRUE,
             auto_drop          => TRUE,
@@ -86,7 +86,7 @@ BEGIN
             DBMS_SCHEDULER.CREATE_JOB (
             job_name           => 'STATUS_ACTIVE_STATION_'||v_station_id||'_OP_ID_'||v_OPERATION_ID,
             job_type           => 'PLSQL_BLOCK',
-            job_action         => 'BEGIN UPDATE TRANSACTION_DEVICE SET status = ''Active'' where station_id = '||v_station_id||'; END;',
+            job_action         => 'BEGIN UPDATE TRANSACTION_DEVICE SET status = ''Active'' where station_id = '||v_station_id||'; commit;  END;',
             start_date         => v_end_time,
             enabled            => TRUE,
             auto_drop          => TRUE,
@@ -100,7 +100,7 @@ BEGIN
             DBMS_SCHEDULER.CREATE_JOB (
             job_name           => 'STATUS_INACTIVE_LINE_'||v_line_id||'_OP_ID_'||v_OPERATION_ID,
             job_type           => 'PLSQL_BLOCK',
-            job_action         => 'BEGIN UPDATE TRANSACTION_DEVICE SET status = ''Inactive'' where line_id = '||v_line_id||'; END;',
+            job_action         => 'BEGIN UPDATE TRANSACTION_DEVICE SET status = ''Inactive'' where line_id = '||v_line_id||'; commit;  END;',
             start_date         => v_start_time,
             enabled            => TRUE,
             auto_drop          => TRUE,
@@ -109,7 +109,7 @@ BEGIN
             DBMS_SCHEDULER.CREATE_JOB (
             job_name           => 'STATUS_ACTIVE_LINE_'||v_line_id||'_OP_ID_'||v_OPERATION_ID,
             job_type           => 'PLSQL_BLOCK',
-            job_action         => 'BEGIN UPDATE TRANSACTION_DEVICE SET status = ''Active'' where line_id = '||v_line_id||'; END;',
+            job_action         => 'BEGIN UPDATE TRANSACTION_DEVICE SET status = ''Active'' where line_id = '||v_line_id||';  commit; END;',
             start_date         => v_end_time,
             enabled            => TRUE,
             auto_drop          => TRUE,
@@ -121,7 +121,7 @@ BEGIN
        BEGIN DBMS_SCHEDULER.CREATE_JOB (
             job_name           => 'STATUS_INACTIVE_RECHARGE_DEVICE_'||v_recharge_device_id||'_OP_ID_'||v_OPERATION_ID,
             job_type           => 'PLSQL_BLOCK',
-            job_action         => 'BEGIN UPDATE RECHARGE_DEVICE SET status = ''Inactive'' where recharge_device_id = '||v_recharge_device_id||'; END;',
+            job_action         => 'BEGIN UPDATE RECHARGE_DEVICE SET status = ''Inactive'' where recharge_device_id = '||v_recharge_device_id||'; commit;  END;',
             start_date         => v_start_time,
             enabled            => TRUE,
             auto_drop          => TRUE,
@@ -130,7 +130,7 @@ BEGIN
             DBMS_SCHEDULER.CREATE_JOB (
             job_name           => 'STATUS_ACTIVE_RECHARGE_DEVICE_'||v_recharge_device_id||'_OP_ID_'||v_OPERATION_ID,
             job_type           => 'PLSQL_BLOCK',
-            job_action         => 'BEGIN UPDATE RECHARGE_DEVICE SET status = ''Active'' where recharge_device_id = '||v_recharge_device_id||'; END;',
+            job_action         => 'BEGIN UPDATE RECHARGE_DEVICE SET status = ''Active'' where recharge_device_id = '||v_recharge_device_id||'; commit;  END;',
             start_date         => v_end_time,
             enabled            => TRUE,
             auto_drop          => TRUE,
@@ -142,7 +142,7 @@ BEGIN
            BEGIN DBMS_SCHEDULER.CREATE_JOB (
             job_name           => 'STATUS_INACTIVE_TRANSIT_'||v_transit_id||'_OP_ID_'||v_OPERATION_ID,
             job_type           => 'PLSQL_BLOCK',
-            job_action         => 'BEGIN UPDATE TRANSIT SET status = ''Inactive'' where transit_id = '||v_transit_id||'; END;',
+            job_action         => 'BEGIN UPDATE TRANSIT SET status = ''Inactive'' where transit_id = '||v_transit_id||'; commit; END;',
             start_date         => v_start_time,
             enabled            => TRUE,
             auto_drop          => TRUE,
@@ -151,7 +151,7 @@ BEGIN
             DBMS_SCHEDULER.CREATE_JOB (
             job_name           => 'STATUS_ACTIVE_TRANSIT_'||v_transit_id||'_OP_ID_'||v_OPERATION_ID,
             job_type           => 'PLSQL_BLOCK',
-            job_action         => 'BEGIN UPDATE TRANSIT SET status = ''Active'' where transit_id = '||v_transit_id||'; END;',
+            job_action         => 'BEGIN UPDATE TRANSIT SET status = ''Active'' where transit_id = '||v_transit_id||'; commit; END;',
             start_date         => v_end_time,
             enabled            => TRUE,
             auto_drop          => TRUE,
@@ -163,7 +163,7 @@ BEGIN
         BEGIN DBMS_SCHEDULER.CREATE_JOB (
             job_name           => 'STATUS_INACTIVE_TRANSACTION_DEVICE_'||v_transaction_device_id||'_OP_ID_'||v_OPERATION_ID,
             job_type           => 'PLSQL_BLOCK',
-            job_action         => 'BEGIN UPDATE TRANSACTION_DEVICE SET status = ''Inactive'' where transaction_device_id = '||v_transaction_device_id||'; END;',
+            job_action         => 'BEGIN UPDATE TRANSACTION_DEVICE SET status = ''Inactive'' where transaction_device_id = '||v_transaction_device_id||'; commit; END;',
             start_date         => v_start_time,
             enabled            => TRUE,
             auto_drop          => TRUE,
@@ -172,7 +172,7 @@ BEGIN
             DBMS_SCHEDULER.CREATE_JOB (
             job_name           => 'STATUS_ACTIVE_TRANSACTION_DEVICE_'||v_transaction_device_id||'_OP_ID_'||v_OPERATION_ID,
             job_type           => 'PLSQL_BLOCK',
-            job_action         => 'BEGIN UPDATE TRANSACTION_DEVICE SET status = ''Active'' where transaction_device_id = '||v_transaction_device_id||'; END;',
+            job_action         => 'BEGIN UPDATE TRANSACTION_DEVICE SET status = ''Active'' where transaction_device_id = '||v_transaction_device_id||'; commit;END;',
             start_date         => v_end_time,
             enabled            => TRUE,
             auto_drop          => TRUE,
@@ -181,21 +181,22 @@ BEGIN
        END;
     ELSE 
         dbms_output.put_line('INVALID OPERATION. REVERTING OPERATIOON '||v_station_id||' - Nothing');
-        --delete from OPERATIONS where operation_id = v_OPERATION_ID;
+        delete from OPERATIONS where operation_id = v_OPERATION_ID;
         --insert into failure_logs(message) values('Failed at Operation logs: Invalid id given');
     END IF;
     ELSE
     dbms_output.put_line('START TIME CANNOT BE LATER THAN END TIME. REVERTING OPERATION');
-        --delete from operations where operation_id = v_OPERATION_ID;
+        delete from operations where operation_id = v_OPERATION_ID;
         --insert into failure_logs(message) values('Failed at Operation logs: START TIME IS LATER THAN END TIME');
     END IF;
+    commit;
     exception 
     when others then
         dbms_output.put_line('INVALID OPERATION. REVERTING OPERATION ID:'||v_OPERATION_ID||' ID='||:new.operation_id ||' ERROR:'|| sqlerrm);
-        --delete from OPERATIONS where operation_id = v_OPERATION_ID;
+        delete from OPERATIONS where operation_id = v_OPERATION_ID;
         --insert into failure_logs(message) select 'Failed at Operation logs: SQL EXCEPTION' from dual;
+    commit;    
 END;
-
 /
 
 CREATE OR REPLACE FUNCTION is_facility_up
@@ -219,7 +220,7 @@ IF facility = 'Transit' THEN
     END IF;
 ELSIF facility = 'Line' THEN
     BEGIN
-    select line_id into v_id_present from operations where line_id = facility_id and systimestamp AT TIME ZONE 'GMT'  between start_time and end_time;
+    select line_id into v_id_present from operations where line_id = facility_id and systimestamp AT TIME ZONE 'AMERICA/NEW_YORK'  between start_time and end_time;
     EXCEPTION WHEN NO_DATA_FOUND THEN
         v_id_present := NULL;
     END;
@@ -230,7 +231,7 @@ ELSIF facility = 'Line' THEN
     END IF;
 ELSIF facility = 'Station' THEN
     BEGIN
-    select station_id into v_id_present from operations where station_id = facility_id and systimestamp AT TIME ZONE 'GMT' between start_time and end_time;
+    select station_id into v_id_present from operations where station_id = facility_id and systimestamp AT TIME ZONE 'AMERICA/NEW_YORK' between start_time and end_time;
     EXCEPTION WHEN NO_DATA_FOUND THEN
         v_id_present := NULL;
     END;
@@ -241,7 +242,7 @@ ELSIF facility = 'Station' THEN
     END IF;
 ELSIF facility = 'Recharge_device' THEN
     BEGIN
-    select recharge_device_id into v_id_present from operations where recharge_device_id = facility_id and systimestamp AT TIME ZONE 'GMT'  between start_time and end_time;
+    select recharge_device_id into v_id_present from operations where recharge_device_id = facility_id and systimestamp AT TIME ZONE 'AMERICA/NEW_YORK'  between start_time and end_time;
     EXCEPTION WHEN NO_DATA_FOUND THEN
         v_id_present := NULL;
     END;
@@ -252,7 +253,7 @@ ELSIF facility = 'Recharge_device' THEN
     END IF;
 ELSIF facility = 'Transaction_device' THEN
     BEGIN
-    select transaction_device_id into v_id_present from operations where transaction_device_id = facility_id and systimestamp AT TIME ZONE 'GMT'  between start_time and end_time;
+    select transaction_device_id into v_id_present from operations where transaction_device_id = facility_id and systimestamp AT TIME ZONE 'AMERICA/NEW_YORK'  between start_time and end_time;
     EXCEPTION WHEN NO_DATA_FOUND THEN
         v_id_present := NULL;
     END;
@@ -279,7 +280,7 @@ v_present := NULL;
     BEGIN
         select 'Pass' into v_present from 
         wallet w join card c on w.wallet_id = c.wallet_id and w.wallet_id=i_wallet_id
-        join pass p on c.card_id = p.card_id and systimestamp AT TIME ZONE 'GMT' between valid_from and pass_expiry;
+        join pass p on c.card_id = p.card_id and systimestamp AT TIME ZONE 'AMERICA/NEW_YORK' between valid_from and pass_expiry;
         
         RETURN v_present;
     EXCEPTION
@@ -288,7 +289,7 @@ v_present := NULL;
     END;
     BEGIN
         select 'Ride' into v_present from
-        wallet w join ticket t on w.wallet_id =t.wallet_id  and w.wallet_id=i_wallet_id and t.rides>0 and w.wallet_expiry >= systimestamp AT TIME ZONE 'GMT';
+        wallet w join ticket t on w.wallet_id =t.wallet_id  and w.wallet_id=i_wallet_id and t.rides>0 and w.wallet_expiry >= systimestamp AT TIME ZONE 'AMERICA/NEW_YORK';
     
         RETURN v_present;
     EXCEPTION
@@ -297,7 +298,7 @@ v_present := NULL;
     END;
     BEGIN
         select 'Balance' into v_present from
-        wallet w join card c on w.wallet_id = c.wallet_id  and w.wallet_id=i_wallet_id and c.balance>0 and w.wallet_expiry >= systimestamp AT TIME ZONE 'GMT'; 
+        wallet w join card c on w.wallet_id = c.wallet_id  and w.wallet_id=i_wallet_id and c.balance>0 and w.wallet_expiry >= systimestamp AT TIME ZONE 'AMERICA/NEW_YORK'; 
     
         RETURN v_present;
     EXCEPTION
@@ -346,7 +347,7 @@ AS
  v_PASS_TYPE PASS_TYPE.pass_type_id%TYPE;
  v_CARD_ID NUMBER;
 BEGIN
-    select status into v_recharge_device_status from recharge_device where recharge_device_id = pi_recharge_device_id;
+    select status into v_recharge_device_status from recharge_device where recharge_device_id = pi_recharge_device_id  and pi_value_of_transaction >0;
     IF v_recharge_device_status = 'Active' THEN
 
     begin
@@ -378,7 +379,7 @@ BEGIN
                 select MAX(card_id) INTO v_CARD_ID from CARD where wallet_id = pi_wallet_id;
 
                 INSERT INTO RECHARGE(recharge_id,value_of_transaction,wallet_id,transaction_time,recharge_type,recharge_device_id) 
-                values (recharge_id_seq.nextval,pi_value_of_transaction,pi_wallet_id, systimestamp AT TIME ZONE 'GMT','Pass',pi_recharge_device_id);
+                values (recharge_id_seq.nextval,pi_value_of_transaction,pi_wallet_id, systimestamp AT TIME ZONE 'AMERICA/NEW_YORK','Pass',pi_recharge_device_id);
                 INSERT INTO Pass(pass_id,card_id,pass_expiry,pass_type_id, recharge_id, valid_from) values (pass_id_seq.nextval,v_CARD_ID,SYSDATE+v_Number_of_days,v_PASS_TYPE,recharge_id_seq.currval,SYSDATE);
                 --Pass trigger to take care of pass addition
                 commit;
@@ -391,7 +392,7 @@ BEGIN
                 BEGIN 
                     UPDATE card set Balance = Balance + pi_value_of_transaction where wallet_id = pi_wallet_id;
                     INSERT INTO RECHARGE(recharge_id,value_of_transaction,wallet_id,transaction_time,recharge_type,recharge_device_id) 
-                    values (recharge_id_seq.nextval,pi_value_of_transaction,pi_wallet_id,systimestamp AT TIME ZONE 'GMT','Top-up',pi_recharge_device_id);
+                    values (recharge_id_seq.nextval,pi_value_of_transaction,pi_wallet_id,systimestamp AT TIME ZONE 'AMERICA/NEW_YORK','Top-up',pi_recharge_device_id);
                     commit;
                     DBMS_OUTPUT.put_line('Transaction Successful');
                 EXCEPTION
@@ -416,7 +417,7 @@ BEGIN
 
                             --UPDATE ticket set rides = pi_value_of_transaction/v_type_price where wallet_id = v_wallet_id;
                             INSERT INTO RECHARGE(recharge_id,value_of_transaction,wallet_id,transaction_time,recharge_type,recharge_device_id) 
-                            values (recharge_id_seq.nextval,pi_value_of_transaction,wallet_id_seq.currval,systimestamp AT TIME ZONE 'GMT','Ride',pi_recharge_device_id);
+                            values (recharge_id_seq.nextval,pi_value_of_transaction,wallet_id_seq.currval,systimestamp AT TIME ZONE 'AMERICA/NEW_YORK','Ride',pi_recharge_device_id);
                             commit;
                             DBMS_OUTPUT.put_line('Transaction Successful');
                         END;
@@ -436,7 +437,7 @@ BEGIN
                     select MAX(no_of_days) INTO v_Number_of_days from PASS_TYPE where price = pi_value_of_transaction;
 
                     INSERT INTO RECHARGE(recharge_id,value_of_transaction,wallet_id,transaction_time,recharge_type,recharge_device_id) 
-                    values (recharge_id_seq.nextval,pi_value_of_transaction,wallet_id_seq.currval,systimestamp AT TIME ZONE 'GMT','Pass',pi_recharge_device_id);
+                    values (recharge_id_seq.nextval,pi_value_of_transaction,wallet_id_seq.currval,systimestamp AT TIME ZONE 'AMERICA/NEW_YORK','Pass',pi_recharge_device_id);
                     INSERT INTO Pass(pass_id,card_id,pass_expiry,pass_type_id, recharge_id, valid_from) values (pass_id_seq.nextval,card_id_seq.currval,SYSDATE+v_Number_of_days,v_PASS_TYPE,recharge_id_seq.currval,SYSDATE);
                     commit;
                     DBMS_OUTPUT.put_line('Transaction Successful');
@@ -454,7 +455,7 @@ BEGIN
                     --UPDATE card set Balance = Balance + pi_value_of_transaction where wallet_id = v_wallet_id;
                     DBMS_OUTPUT.put_line('Trying to add recharge');
                     INSERT INTO RECHARGE(recharge_id,value_of_transaction,wallet_id,transaction_time,recharge_type,recharge_device_id) 
-                    values (recharge_id_seq.nextval,pi_value_of_transaction,wallet_id_seq.currval,systimestamp AT TIME ZONE 'GMT','Top-up',pi_recharge_device_id);
+                    values (recharge_id_seq.nextval,pi_value_of_transaction,wallet_id_seq.currval,systimestamp AT TIME ZONE 'AMERICA/NEW_YORK','Top-up',pi_recharge_device_id);
                     commit;
                     DBMS_OUTPUT.put_line('Transaction Successful');
                 END;
@@ -525,7 +526,7 @@ BEGIN
                 join WALLET W on W.wallet_id = C.wallet_id and W.wallet_id = p_wallet_id
                 where P.pass_expiry >= SYSDATE;
                 INSERT INTO transaction(transaction_id,transaction_type, swipe_time, wallet_id, value, transaction_device_id)
-                VALUES(transaction_id_seq.nextval,'Pass', SYSTIMESTAMP AT TIME ZONE 'GMT', p_wallet_id, 0, p_transaction_device_id);
+                VALUES(transaction_id_seq.nextval,'Pass', SYSTIMESTAMP AT TIME ZONE 'AMERICA/NEW_YORK', p_wallet_id, 0, p_transaction_device_id);
                 COMMIT;
                 DBMS_OUTPUT.put_line('Transaction successful. Enjoy your ride!');
             EXCEPTION
@@ -536,7 +537,7 @@ BEGIN
                 on W.wallet_id = C.wallet_id and W.wallet_id = p_wallet_id and C.Balance >= v_transit_price_per_ride;
                 UPDATE CARD set BALANCE = BALANCE - v_transit_price_per_ride where wallet_id = p_wallet_id;
                 INSERT INTO transaction(transaction_id,transaction_type, swipe_time, wallet_id, value, transaction_device_id)
-                VALUES(transaction_id_seq.nextval,'Balance', SYSTIMESTAMP AT TIME ZONE 'GMT', p_wallet_id, v_transit_price_per_ride, p_transaction_device_id);
+                VALUES(transaction_id_seq.nextval,'Balance', SYSTIMESTAMP AT TIME ZONE 'AMERICA/NEW_YORK', p_wallet_id, v_transit_price_per_ride, p_transaction_device_id);
                 COMMIT;
                 DBMS_OUTPUT.put_line('Transaction successful. Enjoy your ride!');
                 EXCEPTION
@@ -551,7 +552,7 @@ BEGIN
                 SELECT T.rides into v_ticket_rides from TICKET T where T.wallet_id = p_wallet_id and T.rides >= 1 and T.transit_id = v_transit_id;
                 UPDATE TICKET set rides = rides -1 where wallet_id = p_wallet_id;
                 INSERT INTO transaction(transaction_id,transaction_type, swipe_time, wallet_id, value, transaction_device_id)
-                VALUES(transaction_id_seq.nextval,'Ride', SYSTIMESTAMP AT TIME ZONE 'GMT', p_wallet_id, v_transit_price_per_ride, p_transaction_device_id);
+                VALUES(transaction_id_seq.nextval,'Ride', SYSTIMESTAMP AT TIME ZONE 'AMERICA/NEW_YORK', p_wallet_id, v_transit_price_per_ride, p_transaction_device_id);
                 COMMIT;
                 DBMS_OUTPUT.put_line('Transaction successful. Enjoy your ride!');
             EXCEPTION
@@ -603,4 +604,3 @@ BEGIN
   exception when others then return 'Invalid';
 
 END;
-
