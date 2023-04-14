@@ -22,7 +22,9 @@ BEGIN
             delete from RECHARGE where recharge_id = v_RECHARGE_ID;
 END;
 /
-
+DISABLE TRIGGER pass_recharge ON RECHARGE;
+--Note: Disabling trigger since this action is taken care in Recharge_Wallet stored procedure
+/
 set serveroutput on
 CREATE OR REPLACE TRIGGER Operations_sequence_trigger
     AFTER INSERT ON OPERATIONS
@@ -483,6 +485,8 @@ BEGIN
   WHERE wallet_expiry < SYSDATE; 
 END;
 /
+
+
 -- Stored procedure for Transaction --
 CREATE OR REPLACE PROCEDURE process_transaction (
   p_wallet_id        IN wallet.wallet_id%TYPE,
@@ -585,6 +589,9 @@ BEGIN
     VALUES (:NEW.wallet_id, NULL, NULL);
   END IF;
 END;
+/
+DISABLE TRIGGER wallet_trigger ON wallet;
+--Note: Disabling trigger since this action is taken care in recharge_wallet stored procedure
 
 -- Gayatri function --
 CREATE OR REPLACE FUNCTION check_pass_valid(
