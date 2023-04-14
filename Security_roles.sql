@@ -35,8 +35,36 @@ exception
 end;
 /
 
-
-
+--USER CLEANUP
+declare
+    
+    v_sql varchar(2000);
+begin
+   dbms_output.put_line('Start schema cleanup');
+   for i in (select 'Hu' user_name from dual union all
+             select 'Gayatri' user_name from dual union all
+             select 'Sumanth' user_name from dual union all
+             select 'Shrimoyee' user_name from dual            
+   )
+   loop
+   dbms_output.put_line('....Dropping user '||i.user_name);
+   begin
+       
+       v_sql := 'drop user '||i.user_name;
+       execute immediate v_sql;
+       dbms_output.put_line('........user '||i.user_name||' dropped successfully');
+       
+   exception
+       when no_data_found then
+           dbms_output.put_line('........user already dropped');
+   end;
+   end loop;
+   dbms_output.put_line('Schema cleanup successfully completed');
+exception
+   when others then
+      dbms_output.put_line('Failed to execute code:'||sqlerrm);
+end;
+/
 
 
 
@@ -424,7 +452,3 @@ grant admini to Gayatri;
 grant QA to Sumanth;
 
 grant transit_officer to Shrimoyee;
-
-
-
-
