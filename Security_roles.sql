@@ -413,17 +413,18 @@ ALTER USER Hu QUOTA 4000 M ON data;
 
 ALTER USER Gayatri QUOTA 4000 M ON data;
 
-ALTER USER Sumanth QUOTA 4000 M ON data;
+ALTER USER Sumanth QUOTA 3000 M ON data;
 
-ALTER USER Shrimoyee QUOTA 4000 M ON data;
+ALTER USER Shrimoyee QUOTA 2000 M ON data;
 
 grant developer to Hu;
 
-grant developer to Gayatri;
+grant admini to Gayatri;
 
-grant developer to Sumanth;
+grant QA to Sumanth;
 
-grant developer to Shrimoyee;
+grant transit_officer to Shrimoyee;
+
 
 
 
