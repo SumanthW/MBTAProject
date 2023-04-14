@@ -54,7 +54,7 @@ BEGIN
             DBMS_SCHEDULER.CREATE_JOB (
             job_name           => 'STATUS_INACTIVE_STATION_LINE_'||v_station_id||'_'||v_line_id||'_OP_ID_'||v_OPERATION_ID,
             job_type           => 'PLSQL_BLOCK',
-            job_action         => 'BEGIN UPDATE TRANSACTION_DEVICE SET status = ''Inactive'' where station_id = '||v_station_id||' and line_id = '||v_line_id||'; END;',
+            job_action         => 'BEGIN UPDATE TRANSACTION_DEVICE SET status = ''Inactive'' where station_id = '||v_station_id||' and line_id = '||v_line_id||'; commit;  END;',
             start_date         => v_start_time,
             enabled            => TRUE,
             auto_drop          => TRUE,
@@ -63,7 +63,7 @@ BEGIN
             DBMS_SCHEDULER.CREATE_JOB (
             job_name           => 'STATUS_ACTIVE_STATION_LINE_'||v_station_id||'_'||v_line_id||'_OP_ID_'||v_OPERATION_ID,
             job_type           => 'PLSQL_BLOCK',
-            job_action         => 'BEGIN UPDATE TRANSACTION_DEVICE SET status = ''Active'' where station_id = '||v_station_id||' and line_id = '||v_line_id||'; END;',
+            job_action         => 'BEGIN UPDATE TRANSACTION_DEVICE SET status = ''Active'' where station_id = '||v_station_id||' and line_id = '||v_line_id||'; commit;  END;',
             start_date         => v_end_time,
             enabled            => TRUE,
             auto_drop          => TRUE,
@@ -77,7 +77,7 @@ BEGIN
             DBMS_SCHEDULER.CREATE_JOB (
             job_name           => 'STATUS_INACTIVE_STATION_'||v_station_id||'_OP_ID_'||v_OPERATION_ID,
             job_type           => 'PLSQL_BLOCK',
-            job_action         => 'BEGIN UPDATE TRANSACTION_DEVICE SET status = ''Inactive'' where station_id = '||v_station_id||'; END;',
+            job_action         => 'BEGIN UPDATE TRANSACTION_DEVICE SET status = ''Inactive'' where station_id = '||v_station_id||'; commit;  END;',
             start_date         => v_start_time,
             enabled            => TRUE,
             auto_drop          => TRUE,
@@ -86,7 +86,7 @@ BEGIN
             DBMS_SCHEDULER.CREATE_JOB (
             job_name           => 'STATUS_ACTIVE_STATION_'||v_station_id||'_OP_ID_'||v_OPERATION_ID,
             job_type           => 'PLSQL_BLOCK',
-            job_action         => 'BEGIN UPDATE TRANSACTION_DEVICE SET status = ''Active'' where station_id = '||v_station_id||'; END;',
+            job_action         => 'BEGIN UPDATE TRANSACTION_DEVICE SET status = ''Active'' where station_id = '||v_station_id||'; commit;  END;',
             start_date         => v_end_time,
             enabled            => TRUE,
             auto_drop          => TRUE,
@@ -100,7 +100,7 @@ BEGIN
             DBMS_SCHEDULER.CREATE_JOB (
             job_name           => 'STATUS_INACTIVE_LINE_'||v_line_id||'_OP_ID_'||v_OPERATION_ID,
             job_type           => 'PLSQL_BLOCK',
-            job_action         => 'BEGIN UPDATE TRANSACTION_DEVICE SET status = ''Inactive'' where line_id = '||v_line_id||'; END;',
+            job_action         => 'BEGIN UPDATE TRANSACTION_DEVICE SET status = ''Inactive'' where line_id = '||v_line_id||'; commit;  END;',
             start_date         => v_start_time,
             enabled            => TRUE,
             auto_drop          => TRUE,
@@ -109,7 +109,7 @@ BEGIN
             DBMS_SCHEDULER.CREATE_JOB (
             job_name           => 'STATUS_ACTIVE_LINE_'||v_line_id||'_OP_ID_'||v_OPERATION_ID,
             job_type           => 'PLSQL_BLOCK',
-            job_action         => 'BEGIN UPDATE TRANSACTION_DEVICE SET status = ''Active'' where line_id = '||v_line_id||'; END;',
+            job_action         => 'BEGIN UPDATE TRANSACTION_DEVICE SET status = ''Active'' where line_id = '||v_line_id||';  commit; END;',
             start_date         => v_end_time,
             enabled            => TRUE,
             auto_drop          => TRUE,
@@ -121,7 +121,7 @@ BEGIN
        BEGIN DBMS_SCHEDULER.CREATE_JOB (
             job_name           => 'STATUS_INACTIVE_RECHARGE_DEVICE_'||v_recharge_device_id||'_OP_ID_'||v_OPERATION_ID,
             job_type           => 'PLSQL_BLOCK',
-            job_action         => 'BEGIN UPDATE RECHARGE_DEVICE SET status = ''Inactive'' where recharge_device_id = '||v_recharge_device_id||'; END;',
+            job_action         => 'BEGIN UPDATE RECHARGE_DEVICE SET status = ''Inactive'' where recharge_device_id = '||v_recharge_device_id||'; commit;  END;',
             start_date         => v_start_time,
             enabled            => TRUE,
             auto_drop          => TRUE,
@@ -130,7 +130,7 @@ BEGIN
             DBMS_SCHEDULER.CREATE_JOB (
             job_name           => 'STATUS_ACTIVE_RECHARGE_DEVICE_'||v_recharge_device_id||'_OP_ID_'||v_OPERATION_ID,
             job_type           => 'PLSQL_BLOCK',
-            job_action         => 'BEGIN UPDATE RECHARGE_DEVICE SET status = ''Active'' where recharge_device_id = '||v_recharge_device_id||'; END;',
+            job_action         => 'BEGIN UPDATE RECHARGE_DEVICE SET status = ''Active'' where recharge_device_id = '||v_recharge_device_id||'; commit;  END;',
             start_date         => v_end_time,
             enabled            => TRUE,
             auto_drop          => TRUE,
@@ -142,7 +142,7 @@ BEGIN
            BEGIN DBMS_SCHEDULER.CREATE_JOB (
             job_name           => 'STATUS_INACTIVE_TRANSIT_'||v_transit_id||'_OP_ID_'||v_OPERATION_ID,
             job_type           => 'PLSQL_BLOCK',
-            job_action         => 'BEGIN UPDATE TRANSIT SET status = ''Inactive'' where transit_id = '||v_transit_id||'; END;',
+            job_action         => 'BEGIN UPDATE TRANSIT SET status = ''Inactive'' where transit_id = '||v_transit_id||'; commit; END;',
             start_date         => v_start_time,
             enabled            => TRUE,
             auto_drop          => TRUE,
@@ -151,7 +151,7 @@ BEGIN
             DBMS_SCHEDULER.CREATE_JOB (
             job_name           => 'STATUS_ACTIVE_TRANSIT_'||v_transit_id||'_OP_ID_'||v_OPERATION_ID,
             job_type           => 'PLSQL_BLOCK',
-            job_action         => 'BEGIN UPDATE TRANSIT SET status = ''Active'' where transit_id = '||v_transit_id||'; END;',
+            job_action         => 'BEGIN UPDATE TRANSIT SET status = ''Active'' where transit_id = '||v_transit_id||'; commit; END;',
             start_date         => v_end_time,
             enabled            => TRUE,
             auto_drop          => TRUE,
@@ -163,7 +163,7 @@ BEGIN
         BEGIN DBMS_SCHEDULER.CREATE_JOB (
             job_name           => 'STATUS_INACTIVE_TRANSACTION_DEVICE_'||v_transaction_device_id||'_OP_ID_'||v_OPERATION_ID,
             job_type           => 'PLSQL_BLOCK',
-            job_action         => 'BEGIN UPDATE TRANSACTION_DEVICE SET status = ''Inactive'' where transaction_device_id = '||v_transaction_device_id||'; END;',
+            job_action         => 'BEGIN UPDATE TRANSACTION_DEVICE SET status = ''Inactive'' where transaction_device_id = '||v_transaction_device_id||'; commit; END;',
             start_date         => v_start_time,
             enabled            => TRUE,
             auto_drop          => TRUE,
@@ -172,7 +172,7 @@ BEGIN
             DBMS_SCHEDULER.CREATE_JOB (
             job_name           => 'STATUS_ACTIVE_TRANSACTION_DEVICE_'||v_transaction_device_id||'_OP_ID_'||v_OPERATION_ID,
             job_type           => 'PLSQL_BLOCK',
-            job_action         => 'BEGIN UPDATE TRANSACTION_DEVICE SET status = ''Active'' where transaction_device_id = '||v_transaction_device_id||'; END;',
+            job_action         => 'BEGIN UPDATE TRANSACTION_DEVICE SET status = ''Active'' where transaction_device_id = '||v_transaction_device_id||'; commit;END;',
             start_date         => v_end_time,
             enabled            => TRUE,
             auto_drop          => TRUE,
@@ -181,21 +181,22 @@ BEGIN
        END;
     ELSE 
         dbms_output.put_line('INVALID OPERATION. REVERTING OPERATIOON '||v_station_id||' - Nothing');
-        --delete from OPERATIONS where operation_id = v_OPERATION_ID;
+        delete from OPERATIONS where operation_id = v_OPERATION_ID;
         --insert into failure_logs(message) values('Failed at Operation logs: Invalid id given');
     END IF;
     ELSE
     dbms_output.put_line('START TIME CANNOT BE LATER THAN END TIME. REVERTING OPERATION');
-        --delete from operations where operation_id = v_OPERATION_ID;
+        delete from operations where operation_id = v_OPERATION_ID;
         --insert into failure_logs(message) values('Failed at Operation logs: START TIME IS LATER THAN END TIME');
     END IF;
+    commit;
     exception 
     when others then
         dbms_output.put_line('INVALID OPERATION. REVERTING OPERATION ID:'||v_OPERATION_ID||' ID='||:new.operation_id ||' ERROR:'|| sqlerrm);
-        --delete from OPERATIONS where operation_id = v_OPERATION_ID;
+        delete from OPERATIONS where operation_id = v_OPERATION_ID;
         --insert into failure_logs(message) select 'Failed at Operation logs: SQL EXCEPTION' from dual;
+    commit;    
 END;
-
 /
 
 CREATE OR REPLACE FUNCTION is_facility_up
