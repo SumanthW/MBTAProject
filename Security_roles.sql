@@ -65,8 +65,8 @@ GRANT EXECUTE ON can_transact TO admini;
 GRANT EXECUTE ON which_transit TO admini;
 GRANT EXECUTE ON RECHARGE_WALLET TO admini;
 GRANT EXECUTE ON update_wallet_status TO admini;
-GRANT EXECUTE ON process_transaction  TO admini;'
-
+GRANT EXECUTE ON process_transaction  TO admini;
+GRANT EXECUTE ON check_pass_valid  TO admini;'
 
 
 
@@ -136,6 +136,7 @@ GRANT EXECUTE ON which_transit TO developer;
 GRANT EXECUTE ON RECHARGE_WALLET TO developer;
 GRANT EXECUTE ON update_wallet_status TO developer;
 GRANT EXECUTE ON process_transaction  TO developer;
+GRANT EXECUTE ON check_pass_valid  TO developer;
 
  
 
