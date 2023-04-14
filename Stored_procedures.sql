@@ -22,7 +22,7 @@ BEGIN
             delete from RECHARGE where recharge_id = v_RECHARGE_ID;
 END;
 /
-DISABLE TRIGGER pass_recharge ON RECHARGE;
+ALTER TRIGGER pass_recharge DISABLE;
 --Note: Disabling trigger since this action is taken care in Recharge_Wallet stored procedure
 /
 set serveroutput on
@@ -590,7 +590,7 @@ BEGIN
   END IF;
 END;
 /
-DISABLE TRIGGER wallet_trigger ON wallet;
+ALTER TRIGGER wallet_trigger DISABLE;
 --Note: Disabling trigger since this action is taken care in recharge_wallet stored procedure
 
 -- Gayatri function --
